@@ -258,9 +258,12 @@ async function ensureTable(client) {
   await client.query(`CREATE INDEX IF NOT EXISTS idx_fub_leads_neighborhood ON fub_leads(neighborhood)`);
 }
 
+const EXCLUDED_SOURCES = ['Website', 'Apartments.com'];
+
 async function upsertLeads(client, leads) {
   for (const lead of leads) {
     if (!lead.lead_date) continue;
+    if (lead.source && EXCLUDED_SOURCES.includes(lead.source)) continue;
     await client.query(`
       INSERT INTO fub_leads
         (fub_id, agent_name, lead_date, address, zip, neighborhood, beds, price, zillow_url, lead_name, source, stage)
@@ -295,6 +298,7 @@ async function generateDataJson(client, yglListings = []) {
            beds, price, zillow_url, lead_name, source, stage
     FROM fub_leads
     WHERE lead_date >= $1
+      AND (source IS NULL OR source NOT IN ('Website', 'Apartments.com'))
     ORDER BY lead_date DESC, id DESC
   `, [cutoff.toISOString().split('T')[0]]);
 

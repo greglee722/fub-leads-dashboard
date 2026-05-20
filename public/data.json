@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-20T23:39:44.209Z",
+  "generated": "2026-05-20T23:44:14.217Z",
   "version": "0.1.0",
   "agents": [
     "Alejandro Cruz",
@@ -260,21 +260,6 @@
       "lead_name": "Elise Watson",
       "source": "Zillow Rentals",
       "stage": "Options Picked/Complete Showing"
-    },
-    {
-      "id": 23,
-      "fub_id": "14201",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-19",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Dana Goulet",
-      "source": "Apartments.com",
-      "stage": "Lead"
     },
     {
       "id": 22,
@@ -560,21 +545,6 @@
       "lead_name": "Jennifer Tjia",
       "source": "Zillow Rentals",
       "stage": "Time Confirmed"
-    },
-    {
-      "id": 3,
-      "fub_id": "14222",
-      "agent": "Ricky Barua",
-      "date": "2026-05-19",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Katherine Lyons",
-      "source": "Website",
-      "stage": "Lead"
     },
     {
       "id": 2,
@@ -1282,21 +1252,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 322,
-      "fub_id": "14158",
-      "agent": "Alejandro Cruz",
-      "date": "2026-05-18",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Jillian Kittredge",
-      "source": "Website",
-      "stage": "Lead"
-    },
-    {
       "id": 321,
       "fub_id": "14160",
       "agent": "Yuli Burstein",
@@ -1880,21 +1835,6 @@
       "lead_name": "Wayne Hyman",
       "source": "Zillow Rentals",
       "stage": "Non-workable"
-    },
-    {
-      "id": 417,
-      "fub_id": "14031",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-16",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Christie Leege",
-      "source": "Website",
-      "stage": "Options Picked/Complete Showing"
     },
     {
       "id": 416,
@@ -2992,21 +2932,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 432,
-      "fub_id": "14013",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-15",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Katy Whitaker",
-      "source": "Website",
-      "stage": "Non-workable"
-    },
-    {
       "id": 431,
       "fub_id": "14014",
       "agent": "Christian Ferreira",
@@ -3529,51 +3454,6 @@
       "zillow_url": null,
       "lead_name": "Kimberly McPherson",
       "source": "Zillow Rentals",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 490,
-      "fub_id": "13944",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-14",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Ella Zimolo",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 489,
-      "fub_id": "13945",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-14",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Angela Yang",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 488,
-      "fub_id": "13946",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-14",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Emily Cavenagh",
-      "source": "Apartments.com",
       "stage": "Non-workable"
     },
     {
@@ -4807,51 +4687,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 589,
-      "fub_id": "13819",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-12",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Eliane Svelti",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 588,
-      "fub_id": "13820",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-12",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Ariel Tkach",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 587,
-      "fub_id": "13821",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-12",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Caroline Badot",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
       "id": 586,
       "fub_id": "13822",
       "agent": "Yuli Burstein",
@@ -5405,51 +5240,6 @@
       "lead_name": "Tyler Ray",
       "source": "Zillow Rentals",
       "stage": "Non-workable"
-    },
-    {
-      "id": 620,
-      "fub_id": "13782",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-11",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Adam Wener",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 619,
-      "fub_id": "13783",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-11",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Seth Scott",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 618,
-      "fub_id": "13784",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-11",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Madeline Schultze",
-      "source": "Apartments.com",
-      "stage": "Lead"
     },
     {
       "id": 617,
@@ -6607,21 +6397,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 724,
-      "fub_id": "13648",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-08",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Michael Huang",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
       "id": 723,
       "fub_id": "13649",
       "agent": "Jeremy Bonina",
@@ -6800,21 +6575,6 @@
       "lead_name": "Caroline Lavin",
       "source": "Zillow Rentals",
       "stage": "Closed"
-    },
-    {
-      "id": 711,
-      "fub_id": "13666",
-      "agent": "Ricky Barua",
-      "date": "2026-05-08",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Test Test",
-      "source": "Website",
-      "stage": "Lead"
     },
     {
       "id": 710,
@@ -7477,21 +7237,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 762,
-      "fub_id": "13606",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-07",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Nicole Damico",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
       "id": 761,
       "fub_id": "13607",
       "agent": "Alejandro Cruz",
@@ -8092,36 +7837,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 834,
-      "fub_id": "13523",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-06",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Veronica Patron",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 833,
-      "fub_id": "13524",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-06",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Madeline Brown",
-      "source": "Apartments.com",
-      "stage": "Post Showing"
-    },
-    {
       "id": 832,
       "fub_id": "13525",
       "agent": "Yuli Burstein",
@@ -8149,21 +7864,6 @@
       "zillow_url": null,
       "lead_name": "Olivia Davies",
       "source": "Zillow Rentals",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 830,
-      "fub_id": "13527",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-06",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Neilee Zeisloft",
-      "source": "Website",
       "stage": "Non-workable"
     },
     {
@@ -8390,21 +8090,6 @@
       "lead_name": "Brady Graham",
       "source": "Zillow Rentals",
       "stage": "Non-workable"
-    },
-    {
-      "id": 814,
-      "fub_id": "13547",
-      "agent": "Ricky Barua",
-      "date": "2026-05-06",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Olivia Baldino",
-      "source": "Website",
-      "stage": "Lead"
     },
     {
       "id": 813,
@@ -8947,21 +8632,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 876,
-      "fub_id": "13474",
-      "agent": "Ricky Barua",
-      "date": "2026-05-05",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Lauren ODonald",
-      "source": "Website",
-      "stage": "Lead"
-    },
-    {
       "id": 875,
       "fub_id": "13475",
       "agent": "Christian Ferreira",
@@ -9412,21 +9082,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 929,
-      "fub_id": "13412",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-04",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Kyle Gorman",
-      "source": "Website",
-      "stage": "Non-workable"
-    },
-    {
       "id": 928,
       "fub_id": "13413",
       "agent": "Christian Ferreira",
@@ -9529,21 +9184,6 @@
       "zillow_url": null,
       "lead_name": "Sara Reagan",
       "source": "Zillow Rentals",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 921,
-      "fub_id": "13420",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-04",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Caroline Daskalakis",
-      "source": "Website",
       "stage": "Non-workable"
     },
     {
@@ -10672,21 +10312,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 995,
-      "fub_id": "13330",
-      "agent": "Ricky Barua",
-      "date": "2026-05-02",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Josue Rodriguez",
-      "source": "Website",
-      "stage": "Lead"
-    },
-    {
       "id": 994,
       "fub_id": "13331",
       "agent": "Ricky Barua",
@@ -11002,21 +10627,6 @@
       "stage": "Lead"
     },
     {
-      "id": 973,
-      "fub_id": "13357",
-      "agent": "Jeremy Bonina",
-      "date": "2026-05-02",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Erika Sobol",
-      "source": "Website",
-      "stage": "Non-workable"
-    },
-    {
       "id": 972,
       "fub_id": "13358",
       "agent": "Yuli Burstein",
@@ -11317,21 +10927,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 1017,
-      "fub_id": "13303",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-01",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Katie Buher",
-      "source": "Website",
-      "stage": "Non-workable"
-    },
-    {
       "id": 1016,
       "fub_id": "13304",
       "agent": "Christian Ferreira",
@@ -11420,21 +11015,6 @@
       "lead_name": "Leanne Dale",
       "source": "Zillow Rentals",
       "stage": "Lead"
-    },
-    {
-      "id": 1010,
-      "fub_id": "13311",
-      "agent": "Christian Ferreira",
-      "date": "2026-05-01",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Ethan Xin",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
     },
     {
       "id": 1009,
@@ -12004,21 +11584,6 @@
       "zillow_url": null,
       "lead_name": "Shuwen He",
       "source": "Zillow Rentals",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 1053,
-      "fub_id": "13252",
-      "agent": "Christian Ferreira",
-      "date": "2026-04-30",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Flavia Kirz",
-      "source": "Apartments.com",
       "stage": "Non-workable"
     },
     {
@@ -14119,21 +13684,6 @@
       "zillow_url": null,
       "lead_name": "Taylor Gould",
       "source": "Zillow Rentals",
-      "stage": "Non-workable"
-    },
-    {
-      "id": 1201,
-      "fub_id": "13092",
-      "agent": "Christian Ferreira",
-      "date": "2026-04-27",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Mia Hugo",
-      "source": "Apartments.com",
       "stage": "Non-workable"
     },
     {
@@ -16537,21 +16087,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 1357,
-      "fub_id": "12901",
-      "agent": "Ricky Barua",
-      "date": "2026-04-23",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Maggie Boyle",
-      "source": "Apartments.com",
-      "stage": "Lead"
-    },
-    {
       "id": 1356,
       "fub_id": "12902",
       "agent": "Alejandro Cruz",
@@ -16657,21 +16192,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 1349,
-      "fub_id": "12912",
-      "agent": "Ricky Barua",
-      "date": "2026-04-23",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Gabriella Raviv",
-      "source": "Website",
-      "stage": "Lead"
-    },
-    {
       "id": 1348,
       "fub_id": "12913",
       "agent": "Ricky Barua",
@@ -16774,21 +16294,6 @@
       "zillow_url": null,
       "lead_name": "Julianna Harritt",
       "source": "Zillow Rentals",
-      "stage": "Lead"
-    },
-    {
-      "id": 1341,
-      "fub_id": "12920",
-      "agent": "Ricky Barua",
-      "date": "2026-04-23",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Teresa Lunt",
-      "source": "Website",
       "stage": "Lead"
     },
     {
@@ -17405,21 +16910,6 @@
       "lead_name": "Jacob Winters",
       "source": "Zillow Rentals",
       "stage": "Lead"
-    },
-    {
-      "id": 1410,
-      "fub_id": "12842",
-      "agent": "Alejandro Cruz",
-      "date": "2026-04-22",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Ana Alvarado",
-      "source": "Apartments.com",
-      "stage": "Non-workable"
     },
     {
       "id": 1409,
@@ -18367,21 +17857,6 @@
       "stage": "Non-workable"
     },
     {
-      "id": 1475,
-      "fub_id": "12765",
-      "agent": "Ricky Barua",
-      "date": "2026-04-21",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Katie Lewis",
-      "source": "Apartments.com",
-      "stage": "Lead"
-    },
-    {
       "id": 1474,
       "fub_id": "12766",
       "agent": "Owen Hardy",
@@ -18515,21 +17990,6 @@
       "lead_name": "Jacob Winters",
       "source": "Zillow Rentals",
       "stage": "Non-workable"
-    },
-    {
-      "id": 1465,
-      "fub_id": "12775",
-      "agent": "Ricky Barua",
-      "date": "2026-04-21",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Paige Guerreri",
-      "source": "Website",
-      "stage": "Lead"
     },
     {
       "id": 1464,
@@ -18815,21 +18275,6 @@
       "lead_name": "Madhuri Venkateswar",
       "source": "Zillow Rentals",
       "stage": "Non-workable"
-    },
-    {
-      "id": 1555,
-      "fub_id": "12672",
-      "agent": "Ricky Barua",
-      "date": "2026-04-20",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Cynthia Agruso",
-      "source": "Website",
-      "stage": "Lead"
     },
     {
       "id": 1554,
@@ -19175,21 +18620,6 @@
       "lead_name": "Lila Sayre",
       "source": "Zillow Rentals",
       "stage": "Non-workable"
-    },
-    {
-      "id": 1531,
-      "fub_id": "12699",
-      "agent": "Ricky Barua",
-      "date": "2026-04-20",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
-      "price": null,
-      "zillow_url": null,
-      "lead_name": "Favour Otaotu",
-      "source": "Website",
-      "stage": "Lead"
     },
     {
       "id": 1530,
