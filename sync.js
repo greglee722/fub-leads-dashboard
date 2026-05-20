@@ -25,9 +25,17 @@ const ZIP_NEIGHBORHOODS = {
 };
 
 // Mon → pull Fri+Sat+Sun; Tue–Fri → pull yesterday
+// Set BACKFILL_DAYS=30 env var for a one-time historical backfill
 function getDateRange() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  const backfillDays = process.env.BACKFILL_DAYS ? parseInt(process.env.BACKFILL_DAYS, 10) : null;
+  if (backfillDays) {
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - backfillDays);
+    return { startDate, endDate: today };
+  }
 
   const startDate = new Date(today);
   const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon...6=Sat
