@@ -268,9 +268,9 @@ async function upsertLeads(client, leads) {
       ON CONFLICT (fub_id) DO UPDATE SET
         agent_name   = EXCLUDED.agent_name,
         lead_date    = EXCLUDED.lead_date,
-        address      = EXCLUDED.address,
-        zip          = EXCLUDED.zip,
-        neighborhood = EXCLUDED.neighborhood,
+        address      = COALESCE(EXCLUDED.address, fub_leads.address),
+        zip          = COALESCE(EXCLUDED.zip, fub_leads.zip),
+        neighborhood = COALESCE(EXCLUDED.neighborhood, fub_leads.neighborhood),
         beds         = COALESCE(EXCLUDED.beds, fub_leads.beds),
         price        = COALESCE(EXCLUDED.price, fub_leads.price),
         zillow_url   = COALESCE(EXCLUDED.zillow_url, fub_leads.zillow_url),
