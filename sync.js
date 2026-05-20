@@ -78,6 +78,64 @@ function httpsGet(url, apiKey) {
   });
 }
 
+// ── YGL Integration ───────────────────────────────────────────────────────────
+
+function xmlTag(xml, tag) {
+  const m = xml.match(new RegExp(`<${tag}>([^<]*)<\/${tag}>`));
+  return m ? m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim() : '';
+}
+
+function normalizeYGLBeds(bedInfo) {
+  if (!bedInfo) return null;
+  const s = String(bedInfo).toLowerCase().trim();
+  if (s === 'studio' || s === '0') return 0;
+  const n = parseInt(s, 10);
+  return isNaN(n) || n < 0 ? null : n;
+}
+
+async function fetchYGLListings(apiKey) {
+  return new Promise((resolve) => {
+    const body = `key=${encodeURIComponent(apiKey)}&status=ONMARKET`;
+    const req = require('https').request({
+      hostname: 'www.yougotlistings.com',
+      path: '/api/rentals/search.php',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) },
+    }, (res) => {
+      let raw = '';
+      res.on('data', c => raw += c);
+      res.on('end', () => {
+        try {
+          const blocks = raw.match(/<Listing>[\s\S]*?<\/Listing>/g) || [];
+          const listings = blocks.map(block => {
+            const zip = xmlTag(block, 'Zip').replace(/\D/g, '').slice(0, 5);
+            return {
+              id:             xmlTag(block, 'ID'),
+              address:        `${xmlTag(block, 'StreetNumber')} ${xmlTag(block, 'StreetName')}`.trim(),
+              unit:           xmlTag(block, 'Unit'),
+              city:           xmlTag(block, 'City'),
+              zip,
+              neighborhood:   zip ? (ZIP_NEIGHBORHOODS[zip] || null) : null,
+              beds:           normalizeYGLBeds(xmlTag(block, 'BedInfo') || xmlTag(block, 'Beds')),
+              price:          parseInt(xmlTag(block, 'Price'), 10) || null,
+              available_date: xmlTag(block, 'AvailableDate'),
+              fee:            xmlTag(block, 'Fee') === '1',
+            };
+          }).filter(l => l.id);
+          console.log(`  Got ${listings.length} YGL listings`);
+          resolve(listings);
+        } catch (e) {
+          console.warn('  YGL parse error:', e.message);
+          resolve([]);
+        }
+      });
+    });
+    req.on('error', (e) => { console.warn('  YGL fetch error:', e.message); resolve([]); });
+    req.write(body);
+    req.end();
+  });
+}
+
 function extractZip(address) {
   const match = (address || '').match(/\b(\d{5})\b/);
   return match ? match[1] : null;
@@ -228,7 +286,7 @@ async function upsertLeads(client, leads) {
   console.log(`  Upserted ${leads.length} leads`);
 }
 
-async function generateDataJson(client) {
+async function generateDataJson(client, yglListings = []) {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - 180);
 
@@ -262,7 +320,7 @@ async function generateDataJson(client) {
   const neighborhoods = [...new Set(leads.map(l => l.neighborhood).filter(Boolean))].sort();
 
   fs.mkdirSync(path.join(__dirname, 'public'), { recursive: true });
-  fs.writeFileSync(DATA_FILE, JSON.stringify({ generated: new Date().toISOString(), version: VERSION, agents, neighborhoods, leads }, null, 2));
+  fs.writeFileSync(DATA_FILE, JSON.stringify({ generated: new Date().toISOString(), version: VERSION, agents, neighborhoods, leads, yglListings }, null, 2));
   console.log(`  Wrote ${leads.length} leads → public/data.json`);
 }
 
@@ -286,15 +344,19 @@ async function main() {
 
   if (people.length > 0) {
     console.log('\nFetching property data from events...');
-    // Batch event fetches to avoid hitting FUB rate limits (20 concurrent, 200ms between batches)
-    const BATCH = 20;
+    // Batch event fetches to avoid FUB rate limits
+    // Backfill (large sets): 3 concurrent, 1s between batches (~180 req/min)
+    // Daily sync (small sets): 10 concurrent, 200ms between batches
+    const isBackfill = people.length > 100;
+    const BATCH = isBackfill ? 3 : 10;
+    const DELAY = isBackfill ? 1000 : 200;
     const leads = [];
     for (let i = 0; i < people.length; i += BATCH) {
       const batch = people.slice(i, i + BATCH);
       const results = await Promise.all(batch.map(p => processLead(p, apiKey)));
       leads.push(...results);
-      if (i + BATCH < people.length) await new Promise(r => setTimeout(r, 200));
-      if ((i / BATCH + 1) % 5 === 0) {
+      if (i + BATCH < people.length) await new Promise(r => setTimeout(r, DELAY));
+      if (i > 0 && Math.round(i / people.length * 20) > Math.round((i - BATCH) / people.length * 20)) {
         const pct = Math.min(100, Math.round((i + BATCH) / people.length * 100));
         console.log(`  ${pct}% (${Math.min(i + BATCH, people.length)}/${people.length})`);
       }
@@ -308,8 +370,13 @@ async function main() {
     console.log('No new leads — regenerating data.json from existing DB records');
   }
 
+  console.log('\nFetching YGL inventory...');
+  const yglApiKey = process.env.YGL_API_KEY;
+  const yglListings = yglApiKey ? await fetchYGLListings(yglApiKey) : [];
+  if (!yglApiKey) console.log('  YGL_API_KEY not set — skipping');
+
   console.log('\nGenerating data.json...');
-  await generateDataJson(client);
+  await generateDataJson(client, yglListings);
   await client.end();
   console.log('\nDone!');
 }

@@ -26,6 +26,7 @@ jobs:
         env:
           FUB_API_KEY: ${{ secrets.FUB_API_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          YGL_API_KEY: ${{ secrets.YGL_API_KEY }}
 
       - name: Commit updated data.json
         run: |
