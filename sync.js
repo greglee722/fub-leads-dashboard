@@ -85,66 +85,30 @@ function normalizeBeds(raw) {
   return isNaN(n) || n < 0 ? null : n;
 }
 
-// Inspect all FUB fields for beds/price/zillow_url.
-// Logs a diagnostic on the first lead so we know what FUB is sending.
-function extractPropertyData(person, isFirst) {
-  let beds = null;
-  let price = null;
-  let zillow_url = null;
-  let inqAddress = null;
-
-  // 1. inquiries[] — populated by Zillow when lead comes in
-  const inquiries = Array.isArray(person.inquiries) ? person.inquiries : [];
-  if (inquiries.length > 0) {
-    const inq = inquiries[0];
-    if (inq.beds != null)  beds = normalizeBeds(inq.beds);
-    if (inq.price != null) price = parseInt(inq.price, 10) || null;
-    if (inq.url && String(inq.url).includes('zillow.com')) zillow_url = inq.url;
-    if (inq.address) inqAddress = inq.address;
+// Fetch Property Inquiry events for a person and extract the best property data.
+// FUB events have a `property` object with street, city, state, code (ZIP), bedrooms, price, url.
+async function fetchPropertyData(apiKey, personId) {
+  try {
+    const data = await httpsGet(
+      `https://api.followupboss.com/v1/events?personId=${personId}&limit=20`,
+      apiKey
+    );
+    const events = (data.events || []).filter(e => e.property != null);
+    if (!events.length) return null;
+    // Prefer the event with the most data
+    events.sort((a, b) => {
+      const score = e => (e.property.street ? 2 : 0) + (e.property.bedrooms != null ? 1 : 0);
+      return score(b) - score(a);
+    });
+    return events[0].property;
+  } catch {
+    return null;
   }
-
-  // 2. sourceUrl — sometimes the Zillow listing URL
-  if (!zillow_url && person.sourceUrl && String(person.sourceUrl).includes('zillow.com')) {
-    zillow_url = person.sourceUrl;
-  }
-
-  // 3. customFields — check for beds/price-related keys
-  const cf = person.customFields || {};
-  const cfEntries = Array.isArray(cf) ? cf.map(f => [f.name || f.key, f.value]) : Object.entries(cf);
-  if (beds === null) {
-    for (const [k, v] of cfEntries) {
-      if (/bed|bedroom|br/i.test(k)) { beds = normalizeBeds(v); break; }
-    }
-  }
-  if (price === null) {
-    for (const [k, v] of cfEntries) {
-      if (/price|rent|monthly|cost/i.test(k)) {
-        price = parseInt(String(v).replace(/[^0-9]/g, ''), 10) || null;
-        break;
-      }
-    }
-  }
-
-  if (isFirst) {
-    console.log('\n===== PHASE 1 DIAGNOSTIC — first lead raw fields =====');
-    console.log('source:      ', person.source);
-    console.log('sourceUrl:   ', person.sourceUrl);
-    console.log('inquiries:   ', JSON.stringify(person.inquiries, null, 2));
-    console.log('customFields:', JSON.stringify(person.customFields, null, 2));
-    console.log('addresses:   ', JSON.stringify(person.addresses, null, 2));
-    console.log('------');
-    console.log('Extracted => beds:', beds, '| price:', price, '| zillow_url:', zillow_url);
-    console.log('=======================================================\n');
-  }
-
-  return { beds, price, zillow_url, inqAddress };
 }
 
-function buildAddress(person) {
-  const addrs = Array.isArray(person.addresses) ? person.addresses : [];
-  if (!addrs.length) return null;
-  const a = addrs[0];
-  return [a.street, a.city, a.state, a.zip].filter(Boolean).join(', ') || null;
+function propertyToAddress(prop) {
+  if (!prop) return null;
+  return [prop.street, prop.city, prop.state, prop.code].filter(Boolean).join(', ') || null;
 }
 
 async function fetchFubPeople(apiKey, startDate, endDate) {
@@ -165,7 +129,7 @@ async function fetchFubPeople(apiKey, startDate, endDate) {
     for (const p of people) {
       const created = new Date(p.created);
       if (created < startDate) { hitOldDate = true; break; }
-      if (created < endDate) results.push(p); // created >= startDate implied
+      if (created < endDate) results.push(p);
     }
 
     if (hitOldDate || people.length < limit) break;
@@ -176,32 +140,28 @@ async function fetchFubPeople(apiKey, startDate, endDate) {
   return results;
 }
 
-function processLead(person, index) {
-  const { beds, price, zillow_url, inqAddress } = extractPropertyData(person, index === 0);
-  const address = inqAddress || buildAddress(person) || null;
-  const zip = extractZip(address);
+function toEasternDate(isoString) {
+  const d = new Date(isoString);
+  const parts = d.toLocaleDateString('en-US', { timeZone: 'America/New_York' }).split('/');
+  if (parts.length !== 3) return null;
+  return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+}
 
-  // lead_date: use Eastern date of creation
-  let lead_date = null;
-  if (person.created) {
-    const d = new Date(person.created);
-    // toLocaleDateString gives Eastern date; format as YYYY-MM-DD
-    const parts = d.toLocaleDateString('en-US', { timeZone: 'America/New_York' }).split('/');
-    if (parts.length === 3) {
-      lead_date = `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
-    }
-  }
+async function processLead(person, apiKey) {
+  const prop = await fetchPropertyData(apiKey, person.id);
+  const address = propertyToAddress(prop) || null;
+  const zip = prop?.code || extractZip(address);
 
   return {
     fub_id: String(person.id),
     agent_name: person.assignedTo || null,
-    lead_date,
+    lead_date: person.created ? toEasternDate(person.created) : null,
     address,
     zip,
     neighborhood: getNeighborhood(zip),
-    beds,
-    price,
-    zillow_url: zillow_url || null,
+    beds: prop?.bedrooms != null ? normalizeBeds(prop.bedrooms) : null,
+    price: prop?.price ? parseInt(prop.price, 10) || null : null,
+    zillow_url: (prop?.url && String(prop.url).includes('zillow')) ? prop.url : null,
     lead_name: person.name || [person.firstName, person.lastName].filter(Boolean).join(' ') || null,
     source: person.source || null,
     stage: person.stage || null,
@@ -317,7 +277,11 @@ async function main() {
   await ensureTable(client);
 
   if (people.length > 0) {
-    const leads = people.map(processLead);
+    console.log('\nFetching property data from events...');
+    const leads = await Promise.all(people.map(p => processLead(p, apiKey)));
+    const withAddress = leads.filter(l => l.address).length;
+    const withBeds = leads.filter(l => l.beds !== null).length;
+    console.log(`  ${withAddress}/${leads.length} have address | ${withBeds}/${leads.length} have beds`);
     console.log('\nUpserting to database...');
     await upsertLeads(client, leads);
   } else {
