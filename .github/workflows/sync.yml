@@ -1,0 +1,36 @@
+name: Sync FUB Leads
+
+on:
+  schedule:
+    - cron: '0 12 * * 1-5'   # 12:00 UTC = 7am EST / 8am EDT, weekdays only
+  workflow_dispatch:           # manual trigger via GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run sync
+        run: node sync.js
+        env:
+          FUB_API_KEY: ${{ secrets.FUB_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Commit updated data.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data.json
+          git diff --cached --quiet || git commit -m "chore: sync leads $(date +%Y-%m-%d)"
+          git push
