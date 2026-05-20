@@ -286,7 +286,19 @@ async function main() {
 
   if (people.length > 0) {
     console.log('\nFetching property data from events...');
-    const leads = await Promise.all(people.map(p => processLead(p, apiKey)));
+    // Batch event fetches to avoid hitting FUB rate limits (20 concurrent, 200ms between batches)
+    const BATCH = 20;
+    const leads = [];
+    for (let i = 0; i < people.length; i += BATCH) {
+      const batch = people.slice(i, i + BATCH);
+      const results = await Promise.all(batch.map(p => processLead(p, apiKey)));
+      leads.push(...results);
+      if (i + BATCH < people.length) await new Promise(r => setTimeout(r, 200));
+      if ((i / BATCH + 1) % 5 === 0) {
+        const pct = Math.min(100, Math.round((i + BATCH) / people.length * 100));
+        console.log(`  ${pct}% (${Math.min(i + BATCH, people.length)}/${people.length})`);
+      }
+    }
     const withAddress = leads.filter(l => l.address).length;
     const withBeds = leads.filter(l => l.beds !== null).length;
     console.log(`  ${withAddress}/${leads.length} have address | ${withBeds}/${leads.length} have beds`);

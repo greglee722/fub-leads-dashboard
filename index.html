@@ -315,17 +315,38 @@ function renderRecommendations() {
     </div>`;
   }
 
-  // Group by neighborhood + beds
+  // Only use leads that have an actual neighborhood (listing-specific inquiries)
+  const locLeads = leads.filter(l => l.neighborhood);
+
+  if (!locLeads.length) {
+    // No location data → fall back to top agents by volume
+    const agentCounts = {};
+    leads.forEach(l => { if (l.agent) agentCounts[l.agent] = (agentCounts[l.agent] || 0) + 1; });
+    const topAgents = Object.entries(agentCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+    const agentCards = topAgents.map(([agent, count], i) => `
+      <div class="rec-card">
+        <div class="rec-rank">${['#1', '#2', '#3'][i]}</div>
+        <div class="rec-main">${agent}</div>
+        <div class="rec-sub">${count} lead${count !== 1 ? 's' : ''} yesterday</div>
+        <span style="font-size:11px;color:var(--muted);">No listing data — general inquiry leads</span>
+      </div>`).join('');
+    return `<div class="recs-section">
+      <div class="recs-title">💡 Yesterday's Lead Volume by Agent</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Neighborhood/beds data is only captured when a renter inquires on a specific Zillow listing. Yesterday's leads were general inquiries without listing data.</div>
+      <div class="recs-grid">${agentCards}</div>
+    </div>`;
+  }
+
+  // Has location data — show neighborhood × beds recommendations
   const groups = {};
-  leads.forEach(l => {
-    const key = `${l.neighborhood || 'Unknown'}|${l.beds !== null ? l.beds : '?'}`;
-    if (!groups[key]) groups[key] = { neighborhood: l.neighborhood || 'Unknown', beds: l.beds, prices: [], count: 0 };
+  locLeads.forEach(l => {
+    const key = `${l.neighborhood}|${l.beds !== null ? l.beds : '?'}`;
+    if (!groups[key]) groups[key] = { neighborhood: l.neighborhood, beds: l.beds, prices: [], count: 0 };
     groups[key].count++;
     if (l.price) groups[key].prices.push(l.price);
   });
 
   const sorted = Object.values(groups).sort((a, b) => b.count - a.count).slice(0, 3);
-
   const cards = sorted.map((g, i) => {
     const avgPr = g.prices.length ? Math.round(g.prices.reduce((s, p) => s + p, 0) / g.prices.length) : null;
     const label = ['#1 Pick', '#2 Pick', '#3 Pick'][i];
@@ -343,15 +364,13 @@ function renderRecommendations() {
   return `<div class="recs-section">
     <div class="recs-title">💡 Yesterday's Top Ad Opportunities</div>
     <div class="recs-grid">${cards}</div>
-  </div>`;
-}
 
 const BEDS_COLS = [
   { key: 'studio', label: 'Studio', match: b => b === 0 },
   { key: '1br',    label: '1BR',    match: b => b === 1 },
   { key: '2br',    label: '2BR',    match: b => b === 2 },
   { key: '3br',    label: '3BR+',   match: b => b !== null && b >= 3 },
-  { key: 'unk',    label: 'Unknown', match: b => b === null },
+  // 'Unknown' beds column intentionally omitted — not actionable for ad targeting
 ];
 
 function heatClass(count, max) {
@@ -365,7 +384,7 @@ function heatClass(count, max) {
 
 function renderHeatTable(leads) {
   const nbhds = [...new Set(leads.map(l => l.neighborhood).filter(Boolean))].sort();
-  if (!nbhds.length) return '<div class="empty">No neighborhood data — addresses may need ZIP codes.</div>';
+  if (!nbhds.length) return '<div class="empty" style="padding:24px;">No neighborhood data for this date range.<br><span style="font-size:12px;">Location is only captured when a renter inquires on a specific Zillow listing.</span></div>';
 
   // Build count matrix
   const matrix = {};
