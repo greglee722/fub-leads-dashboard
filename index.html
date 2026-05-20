@@ -531,8 +531,8 @@ function goPage(n) {
 
 async function init() {
   try {
-    const res = await fetch('public/data.json');
-    if (!res.ok) throw new Error('data.json not found');
+    const res = await fetch('public/data.json?_=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('data.json not found (HTTP ' + res.status + ')');
     const data = await res.json();
 
     allLeads = data.leads || [];
