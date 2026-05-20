@@ -575,15 +575,15 @@ function render() {
   const cardsHtml  = renderLeadCards(leads);
   const pageHtml   = renderPagination(leads.length);
 
+  const locLeadCount = leads.filter(l => l.neighborhood).length;
   root.innerHTML = `
     ${statsHtml}
     ${recsHtml}
-    ${yglHtml}
     <div class="two-col">
       <div class="heat-section">
         <div class="section-header">
           <span class="section-title">Lead Volume by Neighborhood & Beds</span>
-          <span class="section-sub">${leads.length} leads</span>
+          <span class="section-sub">${locLeadCount} of ${leads.length} leads have location</span>
         </div>
         ${heatHtml}
       </div>
@@ -594,6 +594,7 @@ function render() {
         ${agentHtml}
       </div>
     </div>
+    ${yglHtml}
     <div class="cards-section">
       <div class="section-header">
         <span class="section-title">Lead Cards</span>
