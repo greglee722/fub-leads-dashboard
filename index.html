@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advertising Report v0.4</title>
+<title>Advertising Report v0.5</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -192,7 +192,7 @@
 <div class="header">
   <div class="header-left">
     <h1>Advertising Report</h1>
-    <span class="version">v0.4</span>
+    <span class="version">v0.5</span>
   </div>
   <div style="display:flex;align-items:center;gap:16px;">
     <span class="sync-time" id="syncTime">Loading...</span>
@@ -293,8 +293,9 @@ async function checkAuth() {
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
 const PAGE_SIZE = 25;
-let allLeads = [];
-let allYGL   = [];
+let allLeads     = [];
+let allYGL       = [];
+let zillowPrices = {};
 let currentDate = 'yesterday';
 let currentBeds = null;
 let currentPage = 1;
@@ -377,15 +378,19 @@ function getYesterdayLeads() {
 function getLeadAvgPrice(neighborhood, beds) {
   const nbhd = (neighborhood || '').toLowerCase();
   const col = beds !== null ? BEDS_COLS.find(c => c.match(beds)) : null;
-  const matches = allLeads.filter(l => {
-    if (!l.price || !l.address || !l.neighborhood) return false;
-    const ln = l.neighborhood.toLowerCase();
-    const nameMatch = ln === nbhd || ln.includes(nbhd) || nbhd.includes(ln);
-    if (!nameMatch) return false;
-    return col ? col.match(l.beds) : true;
-  });
-  if (!matches.length) return null;
-  return Math.round(matches.reduce((s, l) => s + l.price, 0) / matches.length);
+  const prices = allLeads
+    .filter(l => {
+      if (!l.address || !l.neighborhood) return false;
+      const ln = l.neighborhood.toLowerCase();
+      const nameMatch = ln === nbhd || ln.includes(nbhd) || nbhd.includes(ln);
+      if (!nameMatch) return false;
+      if (col && !col.match(l.beds)) return false;
+      return true;
+    })
+    .map(l => zillowPrices[l.address]?.price)
+    .filter(p => p != null);
+  if (!prices.length) return null;
+  return Math.round(prices.reduce((s, p) => s + p, 0) / prices.length);
 }
 
 function getTopRec() {
@@ -782,8 +787,9 @@ async function init() {
     if (!res.ok) throw new Error('data.json not found (HTTP ' + res.status + ')');
     const data = await res.json();
 
-    allLeads = data.leads || [];
-    allYGL   = data.yglListings || [];
+    allLeads     = data.leads || [];
+    allYGL       = data.yglListings || [];
+    zillowPrices = data.zillowPrices || {};
 
     // Sync time
     if (data.generated) {

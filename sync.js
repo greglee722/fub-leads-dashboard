@@ -4,7 +4,7 @@ const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 const DATA_FILE = path.join(__dirname, 'public', 'data.json');
 
 // Boston metro ZIP → neighborhood (matches active-ads-combine)
@@ -279,6 +279,17 @@ async function ensureTable(client) {
   await client.query(`CREATE INDEX IF NOT EXISTS idx_fub_leads_neighborhood ON fub_leads(neighborhood)`);
 }
 
+async function ensureZillowPricesTable(client) {
+  await client.query(`
+    CREATE TABLE IF NOT EXISTS zillow_prices (
+      address    TEXT PRIMARY KEY,
+      price      INTEGER,
+      beds       INTEGER,
+      scraped_at TIMESTAMP DEFAULT NOW()
+    )
+  `);
+}
+
 const EXCLUDED_SOURCES = ['Website', 'Apartments.com'];
 
 async function upsertLeads(client, leads) {
@@ -308,6 +319,160 @@ async function upsertLeads(client, leads) {
     ]);
   }
   console.log(`  Upserted ${leads.length} leads`);
+}
+
+// ── Zillow Price Enrichment (Google CSE → zpid → Unofficial Zillow API) ────────
+
+// Step 1: Serper.dev Google search → find Zillow homedetails URL → extract zpid
+// Tries exact address first, then falls back to street + city (no unit/zip) for better hit rate
+function serperSearch(query, serperApiKey) {
+  const body = JSON.stringify({ q: query, num: 5 });
+  return new Promise(resolve => {
+    const req = https.request({
+      hostname: 'google.serper.dev',
+      path: '/search',
+      method: 'POST',
+      headers: {
+        'X-API-KEY': serperApiKey,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    }, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); } catch { resolve(null); }
+      });
+    });
+    req.on('error', () => resolve(null));
+    req.setTimeout(15000, () => { req.destroy(); resolve(null); });
+    req.write(body);
+    req.end();
+  });
+}
+
+function extractZpidFromResults(results) {
+  for (const r of (results || [])) {
+    const match = (r.link || '').match(/\/(\d+)_zpid/);
+    if (match) return match[1];
+  }
+  return null;
+}
+
+// Build address format variations for the same unit
+// FUB: "127 Myrtle St #3, Boston, MA, 02114"
+// Zillow may index as: "127 Myrtle St APT 3" or "127 Myrtle St 3"
+function getAddressVariations(address) {
+  const variations = [];
+  const parts = address.split(',').map(s => s.trim());
+  const street = parts[0] || '';
+  const city = parts[1] || '';
+
+  // Extract unit from "#X" pattern
+  const unitMatch = street.match(/^(.+?)\s*#(\S+)$/);
+  if (unitMatch) {
+    const base = unitMatch[1];
+    const unit = unitMatch[2];
+    // Try: "Street APT Unit, City" then "Street Unit, City"
+    variations.push(`${base} APT ${unit}, ${city}`);
+    variations.push(`${base} ${unit}, ${city}`);
+  }
+  return variations;
+}
+
+async function fetchZpidFromSerper(address, serperApiKey) {
+  // Try 1: exact address match
+  const exact = await serperSearch(`"${address}" site:zillow.com/homedetails`, serperApiKey);
+  const zpid = extractZpidFromResults(exact?.organic);
+  if (zpid) return zpid;
+
+  // Try 2-3: unit format variations (# → APT, # → bare number)
+  const variations = getAddressVariations(address);
+  for (const variant of variations) {
+    await new Promise(r => setTimeout(r, 500));
+    const result = await serperSearch(`"${variant}" site:zillow.com/homedetails`, serperApiKey);
+    const found = extractZpidFromResults(result?.organic);
+    if (found) return found;
+  }
+  return null;
+}
+
+// Step 2: Unofficial Zillow API → /property/all?zpid=xxx → extract rental price
+async function fetchZpidPrice(zpid, rapidApiKey) {
+  return new Promise(resolve => {
+    const opts = {
+      hostname: 'unofficial-zillow-api2.p.rapidapi.com',
+      path: `/property/all?zpid=${zpid}`,
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': 'unofficial-zillow-api2.p.rapidapi.com',
+        'x-rapidapi-key': rapidApiKey,
+      },
+    };
+    const req = https.request(opts, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try {
+          const r = JSON.parse(data);
+          const beds = r.bedrooms || null;
+          const history = r.priceHistory || [];
+          // Rental prices are monthly (< $20k); sale prices are much higher
+          const rentalEntry = history.find(e => e.price && e.price < 20000);
+          if (rentalEntry) {
+            resolve({ price: parseInt(rentalEntry.price, 10), beds });
+            return;
+          }
+          resolve(null);
+        } catch { resolve(null); }
+      });
+    });
+    req.on('error', () => resolve(null));
+    req.setTimeout(15000, () => { req.destroy(); resolve(null); });
+    req.end();
+  });
+}
+
+async function enrichZillowPrices(client, rapidApiKey, serperApiKey) {
+  const backfillDays = process.env.ZILLOW_BACKFILL ? parseInt(process.env.ZILLOW_BACKFILL, 10) : 2;
+  const { rows } = await client.query(`
+    SELECT DISTINCT fl.address FROM fub_leads fl
+    LEFT JOIN zillow_prices zp ON zp.address = fl.address
+    WHERE fl.address IS NOT NULL
+      AND fl.lead_date >= CURRENT_DATE - ($1 || ' days')::INTERVAL
+      AND zp.address IS NULL
+    ORDER BY fl.address
+  `, [backfillDays]);
+
+  if (!rows.length) { console.log('  No new addresses to price'); return; }
+  console.log(`  Fetching Zillow prices for ${rows.length} address(es) (last ${backfillDays} days)...`);
+
+  let priced = 0;
+  for (const { address } of rows) {
+    const zpid = await fetchZpidFromSerper(address, serperApiKey);
+    if (!zpid) {
+      console.log(`    No zpid found: ${address}`);
+      await new Promise(r => setTimeout(r, 1000));
+      continue;
+    }
+    const result = await fetchZpidPrice(zpid, rapidApiKey);
+    if (result && result.price) {
+      await client.query(`
+        INSERT INTO zillow_prices (address, price, beds, scraped_at)
+        VALUES ($1, $2, $3, NOW())
+        ON CONFLICT (address) DO UPDATE SET
+          price = EXCLUDED.price,
+          beds = EXCLUDED.beds,
+          scraped_at = NOW()
+      `, [address, result.price, result.beds]);
+      priced++;
+      console.log(`    ${address} → zpid ${zpid} → $${result.price}`);
+    } else {
+      console.log(`    No rental price: ${address} (zpid ${zpid})`);
+    }
+    await new Promise(r => setTimeout(r, 1200));
+  }
+  console.log(`  Priced ${priced}/${rows.length} address(es)`);
 }
 
 async function generateDataJson(client, yglListings = []) {
@@ -344,8 +509,19 @@ async function generateDataJson(client, yglListings = []) {
   const agents = [...new Set(leads.map(l => l.agent).filter(Boolean))].sort();
   const neighborhoods = [...new Set(leads.map(l => l.neighborhood).filter(Boolean))].sort();
 
+  let zillowPrices = {};
+  try {
+    const { rows: priceRows } = await client.query('SELECT address, price, beds FROM zillow_prices');
+    for (const r of priceRows) {
+      zillowPrices[r.address] = { price: r.price, beds: r.beds };
+    }
+    console.log(`  Loaded ${priceRows.length} Zillow prices`);
+  } catch {
+    // table doesn't exist yet — no prices available
+  }
+
   fs.mkdirSync(path.join(__dirname, 'public'), { recursive: true });
-  fs.writeFileSync(DATA_FILE, JSON.stringify({ generated: new Date().toISOString(), version: VERSION, agents, neighborhoods, leads, yglListings }, null, 2));
+  fs.writeFileSync(DATA_FILE, JSON.stringify({ generated: new Date().toISOString(), version: VERSION, agents, neighborhoods, leads, yglListings, zillowPrices }, null, 2));
   console.log(`  Wrote ${leads.length} leads → public/data.json`);
 }
 
@@ -407,6 +583,7 @@ async function main() {
   const client = new Client({ connectionString: dbUrl, ssl: { rejectUnauthorized: false } });
   await client.connect();
   await ensureTable(client);
+  await ensureZillowPricesTable(client);
 
   if (people.length > 0) {
     console.log('\nFetching property data from events...');
@@ -439,6 +616,16 @@ async function main() {
   if (!process.env.BACKFILL_DAYS) {
     console.log('\nEnriching null-address leads...');
     await enrichNullAddressLeads(client, apiKey);
+  }
+
+  const rapidApiKey = process.env.RAPIDAPI_KEY;
+  const serperApiKey = process.env.SERPER_API_KEY;
+  if (rapidApiKey && serperApiKey) {
+    console.log('\nEnriching Zillow prices...');
+    await enrichZillowPrices(client, rapidApiKey, serperApiKey);
+  } else {
+    const missing = ['RAPIDAPI_KEY', 'SERPER_API_KEY'].filter(k => !process.env[k]);
+    console.log(`\nZillow price enrichment skipped (missing: ${missing.join(', ')})`);
   }
 
   console.log('\nFetching YGL inventory...');

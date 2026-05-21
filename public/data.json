@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-21T15:44:26.097Z",
-  "version": "0.3.0",
+  "generated": "2026-05-21T21:11:16.505Z",
+  "version": "0.4.0",
   "agents": [
     "Alejandro Cruz",
     "Christian Ferreira",
@@ -26,15 +26,15 @@
       "fub_id": "14266",
       "agent": "Yuli Burstein",
       "date": "2026-05-20",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
+      "address": "61 Joy St #4, Boston, MA, 02114",
+      "zip": "02114",
+      "neighborhood": "Beacon Hill",
+      "beds": 1,
       "price": null,
       "zillow_url": null,
       "lead_name": "Emily Paquin",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Revival"
     },
     {
       "id": 4447,
@@ -56,15 +56,15 @@
       "fub_id": "14268",
       "agent": "Jeremy Bonina",
       "date": "2026-05-20",
-      "address": null,
-      "zip": null,
-      "neighborhood": null,
-      "beds": null,
+      "address": "225 Newbury St #4, Boston, MA, 02116",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
       "price": null,
       "zillow_url": null,
       "lead_name": "Emily Paquin",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Non-workable"
     },
     {
       "id": 4445,
@@ -79,7 +79,7 @@
       "zillow_url": null,
       "lead_name": "Christine Pelletier",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Revival"
     },
     {
       "id": 4444,
@@ -94,7 +94,7 @@
       "zillow_url": null,
       "lead_name": "Taylor Dunphy",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Non-workable"
     },
     {
       "id": 4443,
@@ -109,7 +109,7 @@
       "zillow_url": null,
       "lead_name": "Gehrig Dick",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Revival"
     },
     {
       "id": 4442,
@@ -124,7 +124,7 @@
       "zillow_url": null,
       "lead_name": "Zachary Siegel",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Revival"
     },
     {
       "id": 4441,
@@ -154,17 +154,17 @@
       "zillow_url": null,
       "lead_name": "Cristian DiBlasi",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Questions Answered"
     },
     {
       "id": 4439,
       "fub_id": "14276",
       "agent": "Yuli Burstein",
       "date": "2026-05-20",
-      "address": "64 Hemenway St #18, Boston, MA, 02115",
+      "address": "14 Clearway St #1, Boston, MA, 02115",
       "zip": "02115",
       "neighborhood": "Fenway",
-      "beds": 1,
+      "beds": 2,
       "price": null,
       "zillow_url": null,
       "lead_name": "Minh Le",
@@ -191,15 +191,15 @@
       "fub_id": "14278",
       "agent": "Yuli Burstein",
       "date": "2026-05-20",
-      "address": "10 Columbus Sq #2, Boston, MA, 02118",
-      "zip": "02118",
-      "neighborhood": "South End",
+      "address": "4 Champney Pl #1, Boston, MA, 02114",
+      "zip": "02114",
+      "neighborhood": "Beacon Hill",
       "beds": 2,
       "price": null,
       "zillow_url": null,
       "lead_name": "Ruby Reimann",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Non-workable"
     },
     {
       "id": 4436,
@@ -349,7 +349,7 @@
       "zillow_url": null,
       "lead_name": "Ruby Reimann",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Time Confirmed"
     },
     {
       "id": 4426,
@@ -409,7 +409,7 @@
       "zillow_url": null,
       "lead_name": "Bryan Cohoon",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Questions Answered"
     },
     {
       "id": 4355,
@@ -724,7 +724,7 @@
       "zillow_url": null,
       "lead_name": "Mansi Singhal",
       "source": "<unspecified>",
-      "stage": "Lead"
+      "stage": "Questions Answered"
     },
     {
       "id": 4334,
@@ -754,7 +754,7 @@
       "zillow_url": null,
       "lead_name": "Ellah Thomas",
       "source": "<unspecified>",
-      "stage": "Questions Answered"
+      "stage": "Non-workable"
     },
     {
       "id": 4332,
@@ -874,7 +874,7 @@
       "zillow_url": null,
       "lead_name": "Pierce Manchester",
       "source": "Zillow Rentals",
-      "stage": "Time Confirmed"
+      "stage": "Questions Answered"
     },
     {
       "id": 4324,
@@ -19719,50 +19719,62 @@
   ],
   "yglListings": [
     {
-      "id": "438106826",
-      "address": "38 Hemenway St.",
-      "unit": "45",
+      "id": "44970342",
+      "address": "16 Cedar Ln.",
+      "unit": "2",
       "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
+      "zip": "02108",
+      "neighborhood": "Beacon Hill",
       "beds": 0,
-      "price": 2500,
-      "available_date": "07/01/2026",
-      "fee": false
+      "price": 2400,
+      "available_date": "09/01/2026",
+      "fee": true
     },
     {
-      "id": "438102433",
-      "address": "38 Hemenway St.",
-      "unit": "45",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 0,
-      "price": 2475,
-      "available_date": "06/15/2026",
-      "fee": false
-    },
-    {
-      "id": "437446723",
-      "address": "38 Hemenway St.",
-      "unit": "45",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 0,
-      "price": 2450,
-      "available_date": "06/01/2026",
-      "fee": false
-    },
-    {
-      "id": "79002245",
-      "address": "1185 Boylston St.",
-      "unit": "29",
+      "id": "41057953",
+      "address": "1175 Boylston St.",
+      "unit": "46",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2425,
+      "beds": 1,
+      "price": 3095,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41053608",
+      "address": "1175 Boylston St.",
+      "unit": "3",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 3125,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41053213",
+      "address": "1175 Boylston St.",
+      "unit": "12",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 3095,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41092555",
+      "address": "1175 Boylston St.",
+      "unit": "16",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 3095,
       "available_date": "09/01/2026",
       "fee": true
     },
@@ -19791,26 +19803,110 @@
       "fee": true
     },
     {
-      "id": "202169910",
-      "address": "1179 Boylston St.",
-      "unit": "15",
+      "id": "41090659",
+      "address": "235 Park Dr.",
+      "unit": "14",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2395,
-      "available_date": "05/21/2026",
+      "beds": 1,
+      "price": 2695,
+      "available_date": "09/01/2026",
       "fee": true
     },
     {
-      "id": "295416980",
-      "address": "1167 Boylston St.",
-      "unit": "25",
+      "id": "41070435",
+      "address": "235 Park Dr.",
+      "unit": "12",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
       "beds": 1,
       "price": 2750,
+      "available_date": "08/14/2026",
+      "fee": true
+    },
+    {
+      "id": "41069092",
+      "address": "231 Park Dr.",
+      "unit": "2",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2695,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41067275",
+      "address": "231 Park Dr.",
+      "unit": "26",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2795,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41052739",
+      "address": "1171 Boylston St.",
+      "unit": "35",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2895,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41051001",
+      "address": "1171 Boylston St.",
+      "unit": "17",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2725,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41049895",
+      "address": "1167 Boylston St.",
+      "unit": "6",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2745,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41046182",
+      "address": "1163 Boylston St.",
+      "unit": "6",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2795,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41045787",
+      "address": "1163 Boylston St.",
+      "unit": "39",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2895,
       "available_date": "09/01/2026",
       "fee": true
     },
@@ -19895,7 +19991,7 @@
       "neighborhood": "Fenway/Kenmore",
       "beds": 0,
       "price": 2465,
-      "available_date": "05/16/2026",
+      "available_date": "05/21/2026",
       "fee": true
     },
     {
@@ -19911,158 +20007,26 @@
       "fee": true
     },
     {
-      "id": "41045787",
-      "address": "1163 Boylston St.",
-      "unit": "39",
+      "id": "202169910",
+      "address": "1179 Boylston St.",
+      "unit": "15",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2895,
-      "available_date": "09/01/2026",
+      "beds": 0,
+      "price": 2395,
+      "available_date": "05/21/2026",
       "fee": true
     },
     {
-      "id": "41046182",
-      "address": "1163 Boylston St.",
-      "unit": "6",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2795,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41049895",
+      "id": "295416980",
       "address": "1167 Boylston St.",
-      "unit": "6",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2745,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41051001",
-      "address": "1171 Boylston St.",
-      "unit": "17",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2725,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41052739",
-      "address": "1171 Boylston St.",
-      "unit": "35",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2895,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41067275",
-      "address": "231 Park Dr.",
-      "unit": "26",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2795,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41069092",
-      "address": "231 Park Dr.",
-      "unit": "2",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2695,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41070435",
-      "address": "235 Park Dr.",
-      "unit": "12",
+      "unit": "25",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
       "beds": 1,
       "price": 2750,
-      "available_date": "08/14/2026",
-      "fee": true
-    },
-    {
-      "id": "41090659",
-      "address": "235 Park Dr.",
-      "unit": "14",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2695,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41053213",
-      "address": "1175 Boylston St.",
-      "unit": "12",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3095,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41053608",
-      "address": "1175 Boylston St.",
-      "unit": "3",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3125,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41057953",
-      "address": "1175 Boylston St.",
-      "unit": "46",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3095,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41092555",
-      "address": "1175 Boylston St.",
-      "unit": "16",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3095,
       "available_date": "09/01/2026",
       "fee": true
     },
@@ -20079,52 +20043,870 @@
       "fee": true
     },
     {
-      "id": "39374715",
-      "address": "38 Hemenway St.",
-      "unit": "45",
+      "id": "371207264",
+      "address": "665 Washington St.",
+      "unit": "1609",
       "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 2,
+      "price": 5392,
+      "available_date": "05/21/2026",
+      "fee": true
+    },
+    {
+      "id": "371207139",
+      "address": "665 Washington St.",
+      "unit": "PH26L",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 2,
+      "price": 5792,
+      "available_date": "07/19/2026",
+      "fee": true
+    },
+    {
+      "id": "371207136",
+      "address": "665 Washington St.",
+      "unit": "207",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 2,
+      "price": 5107,
+      "available_date": "06/23/2026",
+      "fee": true
+    },
+    {
+      "id": "371207127",
+      "address": "665 Washington St.",
+      "unit": "PH27L",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 2,
+      "price": 5867,
+      "available_date": "08/07/2026",
+      "fee": true
+    },
+    {
+      "id": "371207004",
+      "address": "665 Washington St.",
+      "unit": "1715",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 2,
+      "price": 5467,
+      "available_date": "07/24/2026",
+      "fee": true
+    },
+    {
+      "id": "371207269",
+      "address": "665 Washington St.",
+      "unit": "1516",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 3787,
+      "available_date": "05/04/2026",
+      "fee": true
+    },
+    {
+      "id": "371207254",
+      "address": "665 Washington St.",
+      "unit": "201",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 3726,
+      "available_date": "07/11/2026",
+      "fee": true
+    },
+    {
+      "id": "371207020",
+      "address": "665 Washington St.",
+      "unit": "1511",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
       "beds": 0,
-      "price": 2410,
-      "available_date": "05/19/2026",
-      "fee": false
-    },
-    {
-      "id": "48166064",
-      "address": "91 Prince St.",
-      "unit": "16",
-      "city": "Boston",
-      "zip": "02113",
-      "neighborhood": "North End",
-      "beds": 2,
-      "price": 3795,
-      "available_date": "08/01/2026",
+      "price": 4283,
+      "available_date": "08/13/2026",
       "fee": true
     },
     {
-      "id": "48166059",
-      "address": "91 Prince St.",
-      "unit": "4",
+      "id": "371207046",
+      "address": "665 Washington St.",
+      "unit": "1912",
       "city": "Boston",
-      "zip": "02113",
-      "neighborhood": "North End",
-      "beds": 2,
-      "price": 3695,
-      "available_date": "09/01/2026",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 4233,
+      "available_date": "07/16/2026",
       "fee": true
     },
     {
-      "id": "48166065",
-      "address": "91 Prince St.",
-      "unit": "18",
+      "id": "371207062",
+      "address": "665 Washington St.",
+      "unit": "2313",
       "city": "Boston",
-      "zip": "02113",
-      "neighborhood": "North End",
-      "beds": 2,
-      "price": 3795,
-      "available_date": "09/01/2026",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 4595,
+      "available_date": "06/22/2026",
+      "fee": true
+    },
+    {
+      "id": "371207078",
+      "address": "665 Washington St.",
+      "unit": "205",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 3798,
+      "available_date": "07/01/2026",
+      "fee": true
+    },
+    {
+      "id": "371207176",
+      "address": "665 Washington St.",
+      "unit": "2011",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 4308,
+      "available_date": "07/25/2026",
+      "fee": true
+    },
+    {
+      "id": "371207198",
+      "address": "665 Washington St.",
+      "unit": "PH27E",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 4259,
+      "available_date": "03/28/2026",
+      "fee": true
+    },
+    {
+      "id": "371207313",
+      "address": "665 Washington St.",
+      "unit": "1905",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 3784,
+      "available_date": "07/07/2026",
+      "fee": true
+    },
+    {
+      "id": "371207314",
+      "address": "665 Washington St.",
+      "unit": "1512",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 4008,
+      "available_date": "08/04/2026",
+      "fee": true
+    },
+    {
+      "id": "371207158",
+      "address": "665 Washington St.",
+      "unit": "1808",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 3801,
+      "available_date": "07/06/2026",
+      "fee": true
+    },
+    {
+      "id": "371207154",
+      "address": "665 Washington St.",
+      "unit": "PH27C",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 5093,
+      "available_date": "04/18/2026",
+      "fee": true
+    },
+    {
+      "id": "371207016",
+      "address": "665 Washington St.",
+      "unit": "2001",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 4314,
+      "available_date": "05/07/2026",
+      "fee": true
+    },
+    {
+      "id": "371207036",
+      "address": "665 Washington St.",
+      "unit": "2201",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 4147,
+      "available_date": "04/10/2026",
+      "fee": true
+    },
+    {
+      "id": "371207041",
+      "address": "665 Washington St.",
+      "unit": "2117",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 4592,
+      "available_date": "04/06/2026",
+      "fee": true
+    },
+    {
+      "id": "371207043",
+      "address": "665 Washington St.",
+      "unit": "PH27A",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 4766,
+      "available_date": "04/23/2026",
+      "fee": true
+    },
+    {
+      "id": "371207110",
+      "address": "665 Washington St.",
+      "unit": "2408",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 1,
+      "price": 4038,
+      "available_date": "07/09/2026",
       "fee": true
     }
-  ]
+  ],
+  "zillowPrices": {
+    "108 Myrtle St #12, Boston, MA, 02114": {
+      "price": 3900,
+      "beds": 2
+    },
+    "1102 Boylston St #1, Boston, MA, 02215": {
+      "price": 2850,
+      "beds": 1
+    },
+    "12 Wensley St #3, Boston, MA, 02120": {
+      "price": 3500,
+      "beds": 3
+    },
+    "13 Concord Sq #3, Boston, MA, 02118": {
+      "price": 3250,
+      "beds": 2
+    },
+    "14 Temple St #4, Boston, MA, 02114": {
+      "price": 3200,
+      "beds": 1
+    },
+    "15 Garden St #7, Boston, MA, 02114": {
+      "price": 3600,
+      "beds": 2
+    },
+    "183 Saint Botolph St #1, Boston, MA, 02115": {
+      "price": 3900,
+      "beds": 2
+    },
+    "254 Newbury St #4, Boston, MA, 02116": {
+      "price": 3200,
+      "beds": 1
+    },
+    "45 Worcester St #13, Boston, MA, 02118": {
+      "price": 2500,
+      "beds": null
+    },
+    "476 Columbus Ave #10, Boston, MA, 02118": {
+      "price": 3300,
+      "beds": 1
+    },
+    "49 Saint Germain St #3, Boston, MA, 02115": {
+      "price": 3800,
+      "beds": 2
+    },
+    "4 Champney Pl #1, Boston, MA, 02114": {
+      "price": 3600,
+      "beds": 2
+    },
+    "4 Champney Pl #4, Boston, MA, 02114": {
+      "price": 3700,
+      "beds": 2
+    },
+    "51 Joy St #7, Boston, MA, 02114": {
+      "price": 4600,
+      "beds": 3
+    },
+    "533 Newbury St #3, Boston, MA, 02215": {
+      "price": 3600,
+      "beds": 2
+    },
+    "53 Joy St #7, Boston, MA, 02114": {
+      "price": 2500,
+      "beds": 1
+    },
+    "601 Tremont St #2, Boston, MA, 02118": {
+      "price": 4000,
+      "beds": 2
+    },
+    "61 Joy St #4, Boston, MA, 02114": {
+      "price": 3100,
+      "beds": null
+    },
+    "108 Peterborough St #3e, Boston, MA, 02215": {
+      "price": 4750,
+      "beds": 2
+    },
+    "111 Gainsborough St #102, Boston, MA, 02115": {
+      "price": 4100,
+      "beds": 2
+    },
+    "127 Myrtle St #3, Boston, MA, 02114": {
+      "price": 3695,
+      "beds": 2
+    },
+    "127 Myrtle St #4, Boston, MA, 02114": {
+      "price": 3695,
+      "beds": 2
+    },
+    "137 Charles St #3, Boston, MA, 02114": {
+      "price": 3625,
+      "beds": 2
+    },
+    "149 Park Dr #10, Boston, MA, 02215": {
+      "price": 2725,
+      "beds": 2
+    },
+    "149 Park Dr #11, Boston, MA, 02215": {
+      "price": 2725,
+      "beds": 2
+    },
+    "149 Park Dr #12, Boston, MA, 02215": {
+      "price": 2725,
+      "beds": 2
+    },
+    "149 Park Dr #3, Boston, MA, 02215": {
+      "price": 2725,
+      "beds": 2
+    },
+    "14 Clearway St #1, Boston, MA, 02115": {
+      "price": 4500,
+      "beds": 3
+    },
+    "14 Cumberland St #1, Boston, MA, 02115": {
+      "price": 1950,
+      "beds": 1
+    },
+    "14 E Springfield St #3, Boston, MA, 02118": {
+      "price": 4600,
+      "beds": 4
+    },
+    "173 Saint Botolph St #1, Boston, MA, 02115": {
+      "price": 3600,
+      "beds": 2
+    },
+    "1750 Washington St #10, Boston, MA, 02118": {
+      "price": 3400,
+      "beds": 2
+    },
+    "19 Albemarle St #3, Boston, MA, 02115": {
+      "price": 2900,
+      "beds": 2
+    },
+    "206 Commonwealth Ave #6, Boston, MA, 02116": {
+      "price": 3200,
+      "beds": 1
+    },
+    "220 Hanover St #10, Boston, MA, 02113": {
+      "price": 4350,
+      "beds": 3
+    },
+    "224 Cambridge St #6, Boston, MA, 02114": {
+      "price": 3700,
+      "beds": 2
+    },
+    "225 Newbury St #4, Boston, MA, 02116": {
+      "price": 3200,
+      "beds": 1
+    },
+    "227 Newbury St #2, Boston, MA, 02116": {
+      "price": 3200,
+      "beds": 1
+    },
+    "232 Cambridge St #2, Boston, MA, 02114": {
+      "price": 2400,
+      "beds": null
+    },
+    "23 Symphony Rd #2, Boston, MA, 02115": {
+      "price": 7000,
+      "beds": 4
+    },
+    "24 Clearway St #8, Boston, MA, 02115": {
+      "price": 3800,
+      "beds": 2
+    },
+    "24 Phillips St #3, Boston, MA, 02114": {
+      "price": 3100,
+      "beds": 1
+    },
+    "24 Phillips St #5, Boston, MA, 02114": {
+      "price": 2550,
+      "beds": 1
+    },
+    "28 E Springfield St #2, Boston, MA, 02118": {
+      "price": 3200,
+      "beds": 1
+    },
+    "32 Edgerly Rd #1, Boston, MA, 02115": {
+      "price": 3250,
+      "beds": 2
+    },
+    "39 Charles St #3, Boston, MA, 02114": {
+      "price": 2700,
+      "beds": 1
+    },
+    "39 Saint Botolph St #3, Boston, MA, 02116": {
+      "price": 3060,
+      "beds": 1
+    },
+    "41 E Springfield St #2, Boston, MA, 02118": {
+      "price": 3700,
+      "beds": 2
+    },
+    "44 Joy St #7, Boston, MA, 02114": {
+      "price": 3800,
+      "beds": 2
+    },
+    "466 Commonwealth Ave #306, Boston, MA, 02215": {
+      "price": 3200,
+      "beds": 1
+    },
+    "503 Beacon St #6, Boston, MA, 02215": {
+      "price": 3100,
+      "beds": 1
+    },
+    "52 Clearway St #11, Boston, MA, 02115": {
+      "price": 3800,
+      "beds": 2
+    },
+    "52 Clearway St #4, Boston, MA, 02115": {
+      "price": 2975,
+      "beds": 1
+    },
+    "53 Joy St #1, Boston, MA, 02114": {
+      "price": 4200,
+      "beds": 2
+    },
+    "53 Joy St #3, Boston, MA, 02114": {
+      "price": 3800,
+      "beds": 2
+    },
+    "557 Columbus Ave #201, Boston, MA, 02118": {
+      "price": 3600,
+      "beds": 1
+    },
+    "656 Massachusetts Ave #2, Boston, MA, 02118": {
+      "price": 5000,
+      "beds": 3
+    },
+    "65 Park Dr #25, Boston, MA, 02215": {
+      "price": 2800,
+      "beds": 2
+    },
+    "6 Marlborough St #2a, Boston, MA, 02116": {
+      "price": 3200,
+      "beds": 1
+    },
+    "88 W Cedar St #7, Boston, MA, 02114": {
+      "price": 4000,
+      "beds": 2
+    },
+    "89 Park Dr #17, Boston, MA, 02215": {
+      "price": 2800,
+      "beds": 1
+    },
+    "89 Park Dr #6, Boston, MA, 02215": {
+      "price": 4800,
+      "beds": 3
+    },
+    "90 Saint Botolph St #5, Boston, MA, 02116": {
+      "price": 3000,
+      "beds": 1
+    },
+    "100 Queensberry St #14, Boston, MA, 02215": {
+      "price": 3700,
+      "beds": 2
+    },
+    "104 Queensberry St #5, Boston, MA, 02215": {
+      "price": 3100,
+      "beds": 1
+    },
+    "108 Jersey St #6, Boston, MA, 02215": {
+      "price": 3850,
+      "beds": 2
+    },
+    "108 Myrtle St #14a, Boston, MA, 02114": {
+      "price": 2800,
+      "beds": 1
+    },
+    "10 Columbus Sq #2, Boston, MA, 02118": {
+      "price": 3800,
+      "beds": 2
+    },
+    "10 Columbus Sq #3, Boston, MA, 02118": {
+      "price": 3200,
+      "beds": 1
+    },
+    "10 Columbus Sq #5, Boston, MA, 02118": {
+      "price": 3000,
+      "beds": 1
+    },
+    "121 Park Dr #33, Boston, MA, 02215": {
+      "price": 3850,
+      "beds": 2
+    },
+    "125 Myrtle St #2, Boston, MA, 02114": {
+      "price": 3000,
+      "beds": 1
+    },
+    "12 Arundel St #3, Boston, MA, 02215": {
+      "price": 3200,
+      "beds": 1
+    },
+    "145 Endicott St #11, Boston, MA, 02113": {
+      "price": 3550,
+      "beds": 1
+    },
+    "145 Endicott St #5, Boston, MA, 02113": {
+      "price": 3550,
+      "beds": 1
+    },
+    "147 Charles St #1, Boston, MA, 02114": {
+      "price": 2700,
+      "beds": 1
+    },
+    "147 Charles St #4, Boston, MA, 02114": {
+      "price": 2700,
+      "beds": 1
+    },
+    "14 Temple St #3, Boston, MA, 02114": {
+      "price": 3850,
+      "beds": 2
+    },
+    "161 Endicott St #4r, Boston, MA, 02113": {
+      "price": 2800,
+      "beds": 1
+    },
+    "165 Hemenway St #b1, Boston, MA, 02115": {
+      "price": 3500,
+      "beds": 2
+    },
+    "165 Hemenway St #b2, Boston, MA, 02115": {
+      "price": 3300,
+      "beds": 2
+    },
+    "16 Clearway St #7, Boston, MA, 02115": {
+      "price": 3900,
+      "beds": 2
+    },
+    "1742 Washington St #2, Boston, MA, 02118": {
+      "price": 4000,
+      "beds": 2
+    },
+    "1750 Washington St #5, Boston, MA, 02118": {
+      "price": 4000,
+      "beds": 2
+    },
+    "175 Hemenway St #3, Boston, MA, 02115": {
+      "price": 3850,
+      "beds": 2
+    },
+    "175 Hemenway St #8, Boston, MA, 02115": {
+      "price": 4500,
+      "beds": 2
+    },
+    "17 Garrison St #5, Boston, MA, 02116": {
+      "price": 3200,
+      "beds": 1
+    },
+    "195 Commonwealth Ave #5, Boston, MA, 02116": {
+      "price": 3000,
+      "beds": 1
+    },
+    "206 Commonwealth Ave #8, Boston, MA, 02116": {
+      "price": 2900,
+      "beds": 1
+    },
+    "206 Commonwealth Ave #9, Boston, MA, 02116": {
+      "price": 4100,
+      "beds": 2
+    },
+    "20 Hanson St #1, Boston, MA, 02118": {
+      "price": 4850,
+      "beds": 3
+    },
+    "20 Symphony Rd #5, Boston, MA, 02115": {
+      "price": 4000,
+      "beds": 2
+    },
+    "212 Hemenway St #7, Boston, MA, 02115": {
+      "price": 3850,
+      "beds": 2
+    },
+    "220 Hanover St #28, Boston, MA, 02113": {
+      "price": 3600,
+      "beds": 2
+    },
+    "224 Cambridge St #1, Boston, MA, 02114": {
+      "price": 4650,
+      "beds": 3
+    },
+    "235 Park Dr #10, Boston, MA, 02215": {
+      "price": 3400,
+      "beds": 2
+    },
+    "238 Cambridge St #3, Boston, MA, 02114": {
+      "price": 3700,
+      "beds": 2
+    },
+    "289 Newbury St #9, Boston, MA, 02115": {
+      "price": 2500,
+      "beds": 1
+    },
+    "290 Commonwealth Ave #18, Boston, MA, 02115": {
+      "price": 2075,
+      "beds": null
+    },
+    "2 Joy St #8, Boston, MA, 02108": {
+      "price": 2800,
+      "beds": null
+    },
+    "311 Huntington Ave #5a, Boston, MA, 02115": {
+      "price": 2400,
+      "beds": null
+    },
+    "313 Huntington Ave #7, Boston, MA, 02115": {
+      "price": 3200,
+      "beds": 2
+    },
+    "32 Clearway St #5, Boston, MA, 02115": {
+      "price": 5700,
+      "beds": 3
+    },
+    "32 Irving St #3, Boston, MA, 02114": {
+      "price": 2300,
+      "beds": null
+    },
+    "32 Queensberry St #4, Boston, MA, 02215": {
+      "price": 2600,
+      "beds": null
+    },
+    "34 Charter St #5b, Boston, MA, 02113": {
+      "price": 2800,
+      "beds": 1
+    },
+    "34 Edgerly Rd #2, Boston, MA, 02115": {
+      "price": 3900,
+      "beds": 2
+    },
+    "379 Commonwealth Ave #6, Boston, MA, 02115": {
+      "price": 3000,
+      "beds": 1
+    },
+    "395 Massachusetts Ave #1, Boston, MA, 02115": {
+      "price": 2500,
+      "beds": 1
+    },
+    "395 Massachusetts Ave #2, Boston, MA, 02115": {
+      "price": 2800,
+      "beds": 1
+    },
+    "395 Massachusetts Ave #5, Boston, MA, 02115": {
+      "price": 2700,
+      "beds": 1
+    },
+    "397 Massachusetts Ave #1, Boston, MA, 02115": {
+      "price": 2800,
+      "beds": 1
+    },
+    "3 Champney Pl #3, Boston, MA, 02114": {
+      "price": 3600,
+      "beds": 2
+    },
+    "41 Anderson St #b, Boston, MA, 02114": {
+      "price": 4500,
+      "beds": 3
+    },
+    "41 Highland Park Ave #1, Roxbury, MA, 02119": {
+      "price": 4100,
+      "beds": 3
+    },
+    "437 Columbus Ave #2, Boston, MA, 02116": {
+      "price": 3200,
+      "beds": 1
+    },
+    "43 Bay State Rd #3e, Boston, MA, 02215": {
+      "price": 2700,
+      "beds": 1
+    },
+    "447 Park Dr #6, Boston, MA, 02215": {
+      "price": 3850,
+      "beds": 2
+    },
+    "45 Westland Ave #20, Boston, MA, 02115": {
+      "price": 4750,
+      "beds": 2
+    },
+    "463 Park Dr #9, Boston, MA, 02215": {
+      "price": 3300,
+      "beds": 2
+    },
+    "465 Park Dr #7, Boston, MA, 02215": {
+      "price": 3800,
+      "beds": 2
+    },
+    "50 Hereford St #5, Boston, MA, 02115": {
+      "price": 2900,
+      "beds": 1
+    },
+    "53 Joy St #4, Boston, MA, 02114": {
+      "price": 4800,
+      "beds": 3
+    },
+    "55 Queensberry St #7, Boston, MA, 02215": {
+      "price": 3785,
+      "beds": 2
+    },
+    "64 Hemenway St #21, Boston, MA, 02115": {
+      "price": 2950,
+      "beds": 1
+    },
+    "64 Hemenway St #23, Boston, MA, 02115": {
+      "price": 2800,
+      "beds": 1
+    },
+    "64 Hemenway St #3, Boston, MA, 02115": {
+      "price": 2850,
+      "beds": null
+    },
+    "658 Massachusetts Ave #2, Boston, MA, 02118": {
+      "price": 4000,
+      "beds": 2
+    },
+    "658 Massachusetts Ave #3, Boston, MA, 02118": {
+      "price": 4000,
+      "beds": 2
+    },
+    "658 Massachusetts Ave #6, Boston, MA, 02118": {
+      "price": 4700,
+      "beds": 2
+    },
+    "659 Massachusetts Ave #8, Boston, MA, 02118": {
+      "price": 7000,
+      "beds": 4
+    },
+    "70 Joy St #10, Boston, MA, 02114": {
+      "price": 2950,
+      "beds": 2
+    },
+    "70 Joy St #18, Boston, MA, 02114": {
+      "price": 2800,
+      "beds": 1
+    },
+    "72 Revere St #9, Boston, MA, 02114": {
+      "price": 4800,
+      "beds": 3
+    },
+    "73 Westland Ave #7, Boston, MA, 02115": {
+      "price": 5600,
+      "beds": 4
+    },
+    "752 Tremont St #5, Boston, MA, 02118": {
+      "price": 7500,
+      "beds": 5
+    },
+    "767 Tremont St #7, Boston, MA, 02118": {
+      "price": 4000,
+      "beds": 2
+    },
+    "78 Westland Ave #404, Boston, MA, 02115": {
+      "price": 4150,
+      "beds": 2
+    },
+    "7 Union Park #3, Boston, MA, 02118": {
+      "price": 3800,
+      "beds": 2
+    },
+    "85 Myrtle St #1, Boston, MA, 02114": {
+      "price": 5000,
+      "beds": 2
+    },
+    "85 Myrtle St #3, Boston, MA, 02114": {
+      "price": 2900,
+      "beds": 1
+    },
+    "88 W Cedar St #10, Boston, MA, 02114": {
+      "price": 3900,
+      "beds": 2
+    },
+    "89 E Brookline St #1, Boston, MA, 02118": {
+      "price": 3000,
+      "beds": 1
+    },
+    "8 Milford St #2, Boston, MA, 02118": {
+      "price": 2700,
+      "beds": 1
+    },
+    "8 Milford St #3, Boston, MA, 02118": {
+      "price": 2900,
+      "beds": 1
+    },
+    "913 Boylston St #2, Boston, MA, 02115": {
+      "price": 3100,
+      "beds": 1
+    },
+    "98 Myrtle St #3, Boston, MA, 02114": {
+      "price": 2800,
+      "beds": 1
+    },
+    "98 Myrtle St #4, Boston, MA, 02114": {
+      "price": 4000,
+      "beds": 2
+    },
+    "98 Myrtle St #6, Boston, MA, 02114": {
+      "price": 3600,
+      "beds": 2
+    },
+    "9 Myrtle St #7, Boston, MA, 02114": {
+      "price": 3900,
+      "beds": 2
+    }
+  }
 }
