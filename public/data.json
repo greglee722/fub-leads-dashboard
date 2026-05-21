@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-21T11:53:16.893Z",
+  "generated": "2026-05-21T15:44:26.097Z",
   "version": "0.3.0",
   "agents": [
     "Alejandro Cruz",
@@ -514,7 +514,7 @@
       "zillow_url": null,
       "lead_name": "Mackenzie Arnolds",
       "source": "Zillow Rentals",
-      "stage": "Time Confirmed"
+      "stage": "Non-workable"
     },
     {
       "id": 4348,
@@ -619,7 +619,7 @@
       "zillow_url": null,
       "lead_name": "Nick Denbow",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Non-workable"
     },
     {
       "id": 4341,
@@ -709,7 +709,7 @@
       "zillow_url": null,
       "lead_name": "Mari Quintero",
       "source": "Zillow Rentals",
-      "stage": "Questions Answered"
+      "stage": "Non-workable"
     },
     {
       "id": 4335,
@@ -784,7 +784,7 @@
       "zillow_url": null,
       "lead_name": "Alison Hands",
       "source": "Zillow Rentals",
-      "stage": "Questions Answered"
+      "stage": "Non-workable"
     },
     {
       "id": 4330,
@@ -874,7 +874,7 @@
       "zillow_url": null,
       "lead_name": "Pierce Manchester",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Time Confirmed"
     },
     {
       "id": 4324,
@@ -1429,7 +1429,7 @@
       "zillow_url": null,
       "lead_name": "Daniela Georgieva",
       "source": "Zillow Rentals",
-      "stage": "Time Confirmed"
+      "stage": "Options Picked/Complete Showing"
     },
     {
       "id": 1,
@@ -19719,20 +19719,44 @@
   ],
   "yglListings": [
     {
-      "id": "41055109",
-      "address": "1175 Boylston St. (Bsmt.)",
-      "unit": "50",
+      "id": "438106826",
+      "address": "38 Hemenway St.",
+      "unit": "45",
       "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 2,
-      "price": 3650,
-      "available_date": "09/01/2026",
-      "fee": true
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 0,
+      "price": 2500,
+      "available_date": "07/01/2026",
+      "fee": false
     },
     {
-      "id": "79023021",
-      "address": "1179 Boylston St.",
+      "id": "438102433",
+      "address": "38 Hemenway St.",
+      "unit": "45",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 0,
+      "price": 2475,
+      "available_date": "06/15/2026",
+      "fee": false
+    },
+    {
+      "id": "437446723",
+      "address": "38 Hemenway St.",
+      "unit": "45",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 0,
+      "price": 2450,
+      "available_date": "06/01/2026",
+      "fee": false
+    },
+    {
+      "id": "79002245",
+      "address": "1185 Boylston St.",
       "unit": "29",
       "city": "Boston",
       "zip": "02215",
@@ -19755,8 +19779,8 @@
       "fee": true
     },
     {
-      "id": "79002245",
-      "address": "1185 Boylston St.",
+      "id": "79023021",
+      "address": "1179 Boylston St.",
       "unit": "29",
       "city": "Boston",
       "zip": "02215",
@@ -19764,6 +19788,18 @@
       "beds": 0,
       "price": 2425,
       "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "202169910",
+      "address": "1179 Boylston St.",
+      "unit": "15",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2395,
+      "available_date": "05/21/2026",
       "fee": true
     },
     {
@@ -19779,69 +19815,9 @@
       "fee": true
     },
     {
-      "id": "41048947",
-      "address": "1167 Boylston St.",
-      "unit": "11",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2425,
-      "available_date": "05/21/2026",
-      "fee": true
-    },
-    {
-      "id": "41053845",
-      "address": "1175 Boylston St.",
-      "unit": "9",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2465,
-      "available_date": "05/16/2026",
-      "fee": true
-    },
-    {
-      "id": "41056926",
+      "id": "41082206",
       "address": "1179 Boylston St.",
-      "unit": "17",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2325,
-      "available_date": "05/21/2026",
-      "fee": true
-    },
-    {
-      "id": "41060007",
-      "address": "1185 Boylston St.",
-      "unit": "22",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2225,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41064352",
-      "address": "1191 Boylston St.",
-      "unit": "27",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2375,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41064431",
-      "address": "1191 Boylston St.",
-      "unit": "37",
+      "unit": "19",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
@@ -19863,9 +19839,9 @@
       "fee": true
     },
     {
-      "id": "41082206",
-      "address": "1179 Boylston St.",
-      "unit": "19",
+      "id": "41064431",
+      "address": "1191 Boylston St.",
+      "unit": "37",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
@@ -19875,14 +19851,62 @@
       "fee": true
     },
     {
-      "id": "202169910",
-      "address": "1179 Boylston St.",
-      "unit": "15",
+      "id": "41064352",
+      "address": "1191 Boylston St.",
+      "unit": "27",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
       "beds": 0,
-      "price": 2395,
+      "price": 2375,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41060007",
+      "address": "1185 Boylston St.",
+      "unit": "22",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2225,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41056926",
+      "address": "1179 Boylston St.",
+      "unit": "17",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2325,
+      "available_date": "05/21/2026",
+      "fee": true
+    },
+    {
+      "id": "41053845",
+      "address": "1175 Boylston St.",
+      "unit": "9",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2465,
+      "available_date": "05/16/2026",
+      "fee": true
+    },
+    {
+      "id": "41048947",
+      "address": "1167 Boylston St.",
+      "unit": "11",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2425,
       "available_date": "05/21/2026",
       "fee": true
     },
@@ -19935,30 +19959,6 @@
       "fee": true
     },
     {
-      "id": "41090659",
-      "address": "235 Park Dr.",
-      "unit": "14",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2695,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41070435",
-      "address": "235 Park Dr.",
-      "unit": "12",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2750,
-      "available_date": "08/14/2026",
-      "fee": true
-    },
-    {
       "id": "41052739",
       "address": "1171 Boylston St.",
       "unit": "35",
@@ -19986,6 +19986,30 @@
       "id": "41069092",
       "address": "231 Park Dr.",
       "unit": "2",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2695,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41070435",
+      "address": "235 Park Dr.",
+      "unit": "12",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2750,
+      "available_date": "08/14/2026",
+      "fee": true
+    },
+    {
+      "id": "41090659",
+      "address": "235 Park Dr.",
+      "unit": "14",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
@@ -20043,304 +20067,64 @@
       "fee": true
     },
     {
-      "id": "400634471",
-      "address": "463 Park Dr.",
-      "unit": "19",
+      "id": "41055109",
+      "address": "1175 Boylston St. (Bsmt.)",
+      "unit": "50",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2700,
-      "available_date": "06/01/2026",
+      "beds": 2,
+      "price": 3650,
+      "available_date": "09/01/2026",
       "fee": true
     },
     {
-      "id": "291116758",
-      "address": "2 Champney Pl.",
-      "unit": "2",
-      "city": "Boston",
-      "zip": "02114",
-      "neighborhood": "Beacon Hill",
-      "beds": 1,
-      "price": 2350,
-      "available_date": "06/01/2026",
-      "fee": true
-    },
-    {
-      "id": "424459392",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-1116",
+      "id": "39374715",
+      "address": "38 Hemenway St.",
+      "unit": "45",
       "city": "Boston",
       "zip": "02115",
       "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3744,
-      "available_date": "02/10/2026",
-      "fee": false
-    },
-    {
-      "id": "434842735",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0417",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3494,
-      "available_date": "06/07/2026",
-      "fee": false
-    },
-    {
-      "id": "432166280",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-0517",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3499,
+      "beds": 0,
+      "price": 2410,
       "available_date": "05/19/2026",
       "fee": false
     },
     {
-      "id": "417643416",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-1116",
+      "id": "48166064",
+      "address": "91 Prince St.",
+      "unit": "16",
       "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3494,
-      "available_date": "10/14/2025",
-      "fee": false
+      "zip": "02113",
+      "neighborhood": "North End",
+      "beds": 2,
+      "price": 3795,
+      "available_date": "08/01/2026",
+      "fee": true
     },
     {
-      "id": "417441160",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0416",
+      "id": "48166059",
+      "address": "91 Prince St.",
+      "unit": "4",
       "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3524,
-      "available_date": "01/03/2026",
-      "fee": false
+      "zip": "02113",
+      "neighborhood": "North End",
+      "beds": 2,
+      "price": 3695,
+      "available_date": "09/01/2026",
+      "fee": true
     },
     {
-      "id": "426244130",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0816",
+      "id": "48166065",
+      "address": "91 Prince St.",
+      "unit": "18",
       "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3614,
-      "available_date": "05/05/2026",
-      "fee": false
-    },
-    {
-      "id": "416694129",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-1117",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3614,
-      "available_date": "10/16/2025",
-      "fee": false
-    },
-    {
-      "id": "432165536",
-      "address": "225 Massachusetts Ave.",
-      "unit": "221-1112",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3454,
-      "available_date": "05/12/2026",
-      "fee": false
-    },
-    {
-      "id": "437236541",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-1111",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 4004,
-      "available_date": "09/08/2026",
-      "fee": false
-    },
-    {
-      "id": "431218248",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0414",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 4134,
-      "available_date": "05/31/2026",
-      "fee": false
-    },
-    {
-      "id": "435251825",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0205",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3469,
-      "available_date": "07/04/2026",
-      "fee": false
-    },
-    {
-      "id": "436028617",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-1106",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3504,
-      "available_date": "06/18/2026",
-      "fee": false
-    },
-    {
-      "id": "435561739",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0311",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3479,
-      "available_date": "05/09/2026",
-      "fee": false
-    },
-    {
-      "id": "432940079",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-0807",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 4244,
-      "available_date": "05/30/2026",
-      "fee": false
-    },
-    {
-      "id": "439270766",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-1108",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3439,
-      "available_date": "05/25/2026",
-      "fee": false
-    },
-    {
-      "id": "438319819",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-0612",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3904,
-      "available_date": "07/10/2026",
-      "fee": false
-    },
-    {
-      "id": "432945114",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-1107",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3599,
-      "available_date": "06/02/2026",
-      "fee": false
-    },
-    {
-      "id": "401739941",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-1004",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3884,
-      "available_date": "09/15/2026",
-      "fee": false
-    },
-    {
-      "id": "401756047",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0215",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3574,
-      "available_date": "12/19/2025",
-      "fee": false
-    },
-    {
-      "id": "401759505",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-1109",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3589,
-      "available_date": "06/07/2026",
-      "fee": false
-    },
-    {
-      "id": "401761152",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0917",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3649,
-      "available_date": "05/17/2025",
-      "fee": false
-    },
-    {
-      "id": "401762012",
-      "address": "225 Massachusetts Ave.",
-      "unit": "199-0415",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3574,
-      "available_date": "01/09/2026",
-      "fee": false
-    },
-    {
-      "id": "401764049",
-      "address": "225 Massachusetts Ave.",
-      "unit": "255-0505",
-      "city": "Boston",
-      "zip": "02115",
-      "neighborhood": "Fenway",
-      "beds": 1,
-      "price": 3579,
-      "available_date": "10/15/2026",
-      "fee": false
+      "zip": "02113",
+      "neighborhood": "North End",
+      "beds": 2,
+      "price": 3795,
+      "available_date": "09/01/2026",
+      "fee": true
     }
   ]
 }
