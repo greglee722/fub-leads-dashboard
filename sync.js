@@ -4,7 +4,7 @@ const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 const DATA_FILE = path.join(__dirname, 'public', 'data.json');
 
 // Boston metro ZIP → neighborhood (matches active-ads-combine)
@@ -80,6 +80,16 @@ function httpsGet(url, apiKey) {
 
 // ── YGL Integration ───────────────────────────────────────────────────────────
 
+// Only fetch inventory for these 5 neighborhoods
+const YGL_TARGET_ZIPS = {
+  'Fenway':      ['02115', '02215'],
+  'Back Bay':    ['02116', '02117', '02199'],
+  'South End':   ['02118'],
+  'North End':   ['02109', '02113'],
+  'Beacon Hill': ['02108', '02114'],
+};
+const YGL_TARGET_ZIP_SET = new Set(Object.values(YGL_TARGET_ZIPS).flat());
+
 function xmlTag(xml, tag) {
   const m = xml.match(new RegExp(`<${tag}>([^<]*)<\/${tag}>`));
   return m ? m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim() : '';
@@ -93,9 +103,29 @@ function normalizeYGLBeds(bedInfo) {
   return isNaN(n) || n < 0 ? null : n;
 }
 
-async function fetchYGLListings(apiKey) {
+function parseYGLXml(raw) {
+  const blocks = raw.match(/<Listing>[\s\S]*?<\/Listing>/g) || [];
+  return blocks.map(block => {
+    const zip = xmlTag(block, 'Zip').replace(/\D/g, '').slice(0, 5);
+    return {
+      id:             xmlTag(block, 'ID'),
+      address:        `${xmlTag(block, 'StreetNumber')} ${xmlTag(block, 'StreetName')}`.trim(),
+      unit:           xmlTag(block, 'Unit'),
+      city:           xmlTag(block, 'City'),
+      zip,
+      neighborhood:   zip ? (ZIP_NEIGHBORHOODS[zip] || null) : null,
+      beds:           normalizeYGLBeds(xmlTag(block, 'BedInfo') || xmlTag(block, 'Beds')),
+      price:          parseInt(xmlTag(block, 'Price'), 10) || null,
+      available_date: xmlTag(block, 'AvailableDate'),
+      fee:            xmlTag(block, 'Fee') === '1',
+    };
+  }).filter(l => l.id);
+}
+
+function fetchYGLPage(apiKey, zips) {
   return new Promise((resolve) => {
-    const body = `key=${encodeURIComponent(apiKey)}&status=ONMARKET`;
+    const zipParams = zips.map(z => `zip[]=${encodeURIComponent(z)}`).join('&');
+    const body = `key=${encodeURIComponent(apiKey)}&status=ONMARKET&${zipParams}`;
     const req = require('https').request({
       hostname: 'www.yougotlistings.com',
       path: '/api/rentals/search.php',
@@ -105,35 +135,34 @@ async function fetchYGLListings(apiKey) {
       let raw = '';
       res.on('data', c => raw += c);
       res.on('end', () => {
-        try {
-          const blocks = raw.match(/<Listing>[\s\S]*?<\/Listing>/g) || [];
-          const listings = blocks.map(block => {
-            const zip = xmlTag(block, 'Zip').replace(/\D/g, '').slice(0, 5);
-            return {
-              id:             xmlTag(block, 'ID'),
-              address:        `${xmlTag(block, 'StreetNumber')} ${xmlTag(block, 'StreetName')}`.trim(),
-              unit:           xmlTag(block, 'Unit'),
-              city:           xmlTag(block, 'City'),
-              zip,
-              neighborhood:   zip ? (ZIP_NEIGHBORHOODS[zip] || null) : null,
-              beds:           normalizeYGLBeds(xmlTag(block, 'BedInfo') || xmlTag(block, 'Beds')),
-              price:          parseInt(xmlTag(block, 'Price'), 10) || null,
-              available_date: xmlTag(block, 'AvailableDate'),
-              fee:            xmlTag(block, 'Fee') === '1',
-            };
-          }).filter(l => l.id);
-          console.log(`  Got ${listings.length} YGL listings`);
-          resolve(listings);
-        } catch (e) {
-          console.warn('  YGL parse error:', e.message);
-          resolve([]);
-        }
+        try { resolve(parseYGLXml(raw)); } catch (e) { resolve([]); }
       });
     });
-    req.on('error', (e) => { console.warn('  YGL fetch error:', e.message); resolve([]); });
+    req.on('error', () => resolve([]));
     req.write(body);
     req.end();
   });
+}
+
+async function fetchYGLListings(apiKey) {
+  console.log('  Fetching YGL inventory for 5 target neighborhoods...');
+  const seen = new Set();
+  const allListings = [];
+
+  for (const [nbhd, zips] of Object.entries(YGL_TARGET_ZIPS)) {
+    const listings = await fetchYGLPage(apiKey, zips);
+    // Post-fetch filter: keep only target zips (guards against API ignoring zip param)
+    const filtered = listings.filter(l => YGL_TARGET_ZIP_SET.has(l.zip));
+    let added = 0;
+    for (const l of filtered) {
+      if (!seen.has(l.id)) { seen.add(l.id); allListings.push(l); added++; }
+    }
+    console.log(`    ${nbhd}: ${added} listings`);
+    await new Promise(r => setTimeout(r, 400));
+  }
+
+  console.log(`  Got ${allListings.length} YGL listings total`);
+  return allListings;
 }
 
 function extractZip(address) {
