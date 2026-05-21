@@ -122,10 +122,10 @@ function parseYGLXml(raw) {
   }).filter(l => l.id);
 }
 
-function fetchYGLPage(apiKey, zips) {
+async function fetchYGLListings(apiKey) {
+  // YGL API doesn't support zip filtering — fetch all and filter post-fetch to 5 target neighborhoods
   return new Promise((resolve) => {
-    const zipParams = zips.map(z => `zip[]=${encodeURIComponent(z)}`).join('&');
-    const body = `key=${encodeURIComponent(apiKey)}&status=ONMARKET&${zipParams}`;
+    const body = `key=${encodeURIComponent(apiKey)}&status=ONMARKET`;
     const req = require('https').request({
       hostname: 'www.yougotlistings.com',
       path: '/api/rentals/search.php',
@@ -135,34 +135,26 @@ function fetchYGLPage(apiKey, zips) {
       let raw = '';
       res.on('data', c => raw += c);
       res.on('end', () => {
-        try { resolve(parseYGLXml(raw)); } catch (e) { resolve([]); }
+        try {
+          const all = parseYGLXml(raw);
+          const listings = all.filter(l => YGL_TARGET_ZIP_SET.has(l.zip));
+          const byNbhd = {};
+          for (const l of listings) {
+            byNbhd[l.neighborhood] = (byNbhd[l.neighborhood] || 0) + 1;
+          }
+          console.log(`  Got ${listings.length}/${all.length} YGL listings (5 target neighborhoods)`);
+          Object.entries(byNbhd).forEach(([n, c]) => console.log(`    ${n}: ${c}`));
+          resolve(listings);
+        } catch (e) {
+          console.warn('  YGL parse error:', e.message);
+          resolve([]);
+        }
       });
     });
-    req.on('error', () => resolve([]));
+    req.on('error', (e) => { console.warn('  YGL fetch error:', e.message); resolve([]); });
     req.write(body);
     req.end();
   });
-}
-
-async function fetchYGLListings(apiKey) {
-  console.log('  Fetching YGL inventory for 5 target neighborhoods...');
-  const seen = new Set();
-  const allListings = [];
-
-  for (const [nbhd, zips] of Object.entries(YGL_TARGET_ZIPS)) {
-    const listings = await fetchYGLPage(apiKey, zips);
-    // Post-fetch filter: keep only target zips (guards against API ignoring zip param)
-    const filtered = listings.filter(l => YGL_TARGET_ZIP_SET.has(l.zip));
-    let added = 0;
-    for (const l of filtered) {
-      if (!seen.has(l.id)) { seen.add(l.id); allListings.push(l); added++; }
-    }
-    console.log(`    ${nbhd}: ${added} listings`);
-    await new Promise(r => setTimeout(r, 400));
-  }
-
-  console.log(`  Got ${allListings.length} YGL listings total`);
-  return allListings;
 }
 
 function extractZip(address) {
