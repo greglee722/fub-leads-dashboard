@@ -4,7 +4,7 @@ const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 const DATA_FILE = path.join(__dirname, 'public', 'data.json');
 
 // Boston metro ZIP → neighborhood (matches active-ads-combine)
@@ -349,6 +349,47 @@ async function generateDataJson(client, yglListings = []) {
   console.log(`  Wrote ${leads.length} leads → public/data.json`);
 }
 
+async function enrichNullAddressLeads(client, apiKey) {
+  const { rows } = await client.query(`
+    SELECT fub_id FROM fub_leads
+    WHERE address IS NULL
+      AND lead_date >= CURRENT_DATE - INTERVAL '14 days'
+      AND (source IS NULL OR source NOT IN ('Website', 'Apartments.com'))
+    ORDER BY lead_date DESC
+  `);
+
+  if (!rows.length) { console.log('  No null-address leads to enrich'); return; }
+  console.log(`  Enriching ${rows.length} null-address lead(s) from last 14 days...`);
+
+  let enriched = 0;
+  for (const { fub_id } of rows) {
+    const prop = await fetchPropertyData(apiKey, fub_id);
+    const address = prop ? (propertyToAddress(prop) || null) : null;
+
+    if (address) {
+      const zip = prop?.code || extractZip(address);
+      const neighborhood = getNeighborhood(zip);
+      const beds = prop?.bedrooms != null ? normalizeBeds(prop.bedrooms) : null;
+      const price = prop?.price ? parseInt(prop.price, 10) || null : null;
+      const zillow_url = (prop?.url && String(prop.url).includes('zillow')) ? prop.url : null;
+      await client.query(`
+        UPDATE fub_leads SET
+          address      = COALESCE(address, $1),
+          zip          = COALESCE(zip, $2),
+          neighborhood = COALESCE(neighborhood, $3),
+          beds         = COALESCE(beds, $4),
+          price        = COALESCE(price, $5),
+          zillow_url   = COALESCE(zillow_url, $6)
+        WHERE fub_id = $7 AND address IS NULL
+      `, [address, zip, neighborhood, beds, price, zillow_url, fub_id]);
+      enriched++;
+    }
+
+    await new Promise(r => setTimeout(r, 700));
+  }
+  console.log(`  Enriched ${enriched}/${rows.length} lead(s)`);
+}
+
 async function main() {
   const apiKey = process.env.FUB_API_KEY;
   const dbUrl = process.env.DATABASE_URL;
@@ -393,6 +434,11 @@ async function main() {
     await upsertLeads(client, leads);
   } else {
     console.log('No new leads — regenerating data.json from existing DB records');
+  }
+
+  if (!process.env.BACKFILL_DAYS) {
+    console.log('\nEnriching null-address leads...');
+    await enrichNullAddressLeads(client, apiKey);
   }
 
   console.log('\nFetching YGL inventory...');
