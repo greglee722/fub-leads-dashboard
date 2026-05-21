@@ -410,7 +410,7 @@ function renderStats(leads) {
   const topNbhd = Object.entries(nbhds).sort((a, b) => b[1] - a[1])[0];
   const topRec = getTopRec();
   const recPriceStr = topRec?.yglPrice ? ` · ${fmtPrice(topRec.yglPrice)}` : '';
-  const recPriceSrc = topRec?.yglPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:2px;">Price via YGL</div>' : '';
+  const recPriceSrc = topRec ? (topRec.yglPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:2px;">Price via YGL</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:2px;">No price data available</div>') : '';
 
   return `
     <div class="stats-row">
@@ -481,7 +481,9 @@ function renderRecommendations() {
     const label = ['#1 Pick', '#2 Pick', '#3 Pick'][i];
     const bedsStr = bedsLabel(g.beds);
     const priceStr = displayPrice ? ` · avg ${fmtPrice(displayPrice)}` : '';
-    const priceSrc = yglPrice && !fubPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Price via YGL inventory</div>' : '';
+    const priceSrc = displayPrice
+      ? (yglPrice && !fubPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Price via YGL inventory</div>' : '')
+      : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">No price data available</div>';
     return `
       <div class="rec-card">
         <div class="rec-rank">${label}</div>
