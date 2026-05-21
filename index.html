@@ -88,6 +88,23 @@
   .ygl-3 { background: #f2bc44; color: #fff; }
   .ygl-4 { background: #d4960a; color: #fff; }
 
+  /* Price table */
+  .price-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 22px; }
+  .price-table { width: 100%; border-collapse: collapse; }
+  .price-table th { padding: 10px 12px; font-size: 11px; font-weight: 700; color: var(--muted); text-align: center; background: #f0fffe; border-bottom: 1px solid var(--green-border); letter-spacing: .5px; text-transform: uppercase; }
+  .price-table th:first-child { text-align: left; }
+  .price-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #eef5fb; text-align: center; min-width: 80px; }
+  .price-table td:first-child { font-weight: 600; text-align: left; color: var(--text); }
+  .price-table tr:last-child td { border-bottom: none; }
+  .price-cell { font-weight: 700; color: var(--green); font-size: 13px; }
+  .price-na { color: #ccc; font-size: 12px; }
+
+  /* View toggle */
+  .view-toggle { display: flex; gap: 1px; background: var(--border); border-radius: 6px; overflow: hidden; margin-left: auto; }
+  .view-toggle button { background: var(--card); border: none; padding: 6px 14px; font-size: 13px; font-family: var(--font-body); color: var(--muted); cursor: pointer; white-space: nowrap; }
+  .view-toggle button:hover { background: var(--primary-light); color: var(--primary); }
+  .view-toggle button.active { background: var(--primary); color: #fff; font-weight: 700; }
+
   /* Two-column layout */
   .two-col { display: grid; grid-template-columns: 1fr 360px; gap: 20px; margin-bottom: 20px; }
 
@@ -236,6 +253,11 @@
       <button onclick="setBeds(3)">3BR+</button>
     </div>
   </div>
+  <div class="filter-sep"></div>
+  <div class="view-toggle" id="viewToggle">
+    <button onclick="setView('dashboard')" class="active">Dashboard</button>
+    <button onclick="setView('ygl')">YGL Inventory</button>
+  </div>
 </div>
 
 <div class="main">
@@ -299,6 +321,7 @@ let zillowPrices = {};
 let currentDate = 'yesterday';
 let currentBeds = null;
 let currentPage = 1;
+let currentView = 'dashboard';
 
 // ── Utilities ────────────────────────────────────────────────────────────────
 
@@ -607,6 +630,62 @@ function renderHeatTable(leads) {
   </table>`;
 }
 
+function renderPriceTable() {
+  // Build neighborhood × beds average price grid from ALL leads (not date-filtered)
+  // Dedupe by unique address so each listing is counted once
+  const addrMap = {}; // address → { neighborhood, beds, price }
+  allLeads.forEach(l => {
+    if (!l.address || !l.neighborhood) return;
+    const zp = zillowPrices[l.address];
+    if (!zp || !zp.price) return;
+    if (!addrMap[l.address]) {
+      addrMap[l.address] = { neighborhood: l.neighborhood, beds: l.beds, price: zp.price };
+    }
+  });
+
+  // Group by neighborhood × beds
+  const matrix = {}; // neighborhood → bedsKey → [prices]
+  Object.values(addrMap).forEach(({ neighborhood, beds, price }) => {
+    if (!matrix[neighborhood]) matrix[neighborhood] = {};
+    BEDS_COLS.forEach(col => {
+      if (col.match(beds)) {
+        if (!matrix[neighborhood][col.key]) matrix[neighborhood][col.key] = [];
+        matrix[neighborhood][col.key].push(price);
+      }
+    });
+  });
+
+  const nbhds = Object.keys(matrix).sort();
+  if (!nbhds.length) return '<div class="empty" style="padding:24px;">No Zillow price data available yet.</div>';
+
+  const cols = BEDS_COLS.filter(c => nbhds.some(n => matrix[n]?.[c.key]?.length));
+  const headers = cols.map(c => `<th>${c.label}</th>`).join('');
+  const rows = nbhds.map(n => {
+    const cells = cols.map(c => {
+      const prices = matrix[n]?.[c.key] || [];
+      if (!prices.length) return '<td><span class="price-na">—</span></td>';
+      const avg = Math.round(prices.reduce((s, p) => s + p, 0) / prices.length);
+      return `<td><span class="price-cell">$${avg.toLocaleString()}</span><div style="font-size:10px;color:var(--muted);">${prices.length} listing${prices.length !== 1 ? 's' : ''}</div></td>`;
+    }).join('');
+    const allPrices = cols.flatMap(c => matrix[n]?.[c.key] || []);
+    const totalAvg = allPrices.length ? Math.round(allPrices.reduce((s, p) => s + p, 0) / allPrices.length) : null;
+    const avgStr = totalAvg ? `$${totalAvg.toLocaleString()}` : '—';
+    return `<tr><td>${n} <span style="color:var(--muted);font-weight:400;">(${allPrices.length})</span></td>${cells}</tr>`;
+  }).join('');
+
+  const totalAddrs = Object.keys(addrMap).length;
+  return `<div class="price-section">
+    <div class="section-header" style="border-bottom-color:var(--green-border);">
+      <span class="section-title" style="color:var(--green);">Avg. Rent Price by Neighborhood & Beds</span>
+      <span class="section-sub">${totalAddrs} unique Zillow listings priced</span>
+    </div>
+    <table class="price-table">
+      <thead><tr><th>Neighborhood</th>${headers}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
 function renderAgentBreakdown(leads) {
   const counts = {};
   leads.forEach(l => { if (l.agent) counts[l.agent] = (counts[l.agent] || 0) + 1; });
@@ -715,9 +794,17 @@ function render() {
   const leads = getFilteredLeads();
   const root  = document.getElementById('root');
 
+  // YGL-only view
+  if (currentView === 'ygl') {
+    const yglHtml = renderYGLSection();
+    root.innerHTML = yglHtml || '<div class="empty" style="padding:40px;">No YGL inventory data available. Data is fetched during daily sync.</div>';
+    return;
+  }
+
+  // Dashboard view
   const statsHtml  = renderStats(leads);
   const recsHtml   = renderRecommendations();
-  const yglHtml    = renderYGLSection();
+  const priceHtml  = renderPriceTable();
   const heatHtml   = renderHeatTable(leads);
   const agentHtml  = renderAgentBreakdown(leads);
   const zillowLeads = leads.filter(l => l.address);
@@ -743,7 +830,7 @@ function render() {
         ${agentHtml}
       </div>
     </div>
-    ${yglHtml}
+    ${priceHtml}
     <div class="cards-section">
       <div class="section-header">
         <span class="section-title">Lead Cards</span>
@@ -769,6 +856,14 @@ function setBeds(val) {
   currentBeds = val;
   currentPage = 1;
   document.querySelectorAll('#bedButtons button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function setView(val) {
+  currentView = val;
+  currentPage = 1;
+  document.querySelectorAll('#viewToggle button').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
   render();
 }
