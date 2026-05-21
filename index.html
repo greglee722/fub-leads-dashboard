@@ -711,9 +711,9 @@ function renderLeadCards(leads) {
   return page.map(l => {
     const bedsStr = l.beds !== null ? bedsLabel(l.beds) : null;
     const priceStr = fmtPrice(l.price);
-    const actionBtn = l.zillow_url
-      ? `<a class="link-btn zillow" href="${l.zillow_url}" target="_blank">View Listing →</a>`
-      : `<a class="link-btn" href="${searchZillowUrl(l.address)}" target="_blank">Search Zillow →</a>`;
+    const actionBtn = l.fub_id
+      ? `<a class="link-btn" href="https://app.followupboss.com/2/people/view/${l.fub_id}" target="_blank">View in FUB →</a>`
+      : '';
 
     return `
       <div class="lead-card">
