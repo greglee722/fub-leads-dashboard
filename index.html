@@ -152,9 +152,36 @@
     .two-col { grid-template-columns: 1fr; }
     .recs-grid { grid-template-columns: 1fr; }
   }
+
+  /* Login overlay */
+  #loginOverlay { display:flex; align-items:center; justify-content:center; position:fixed; inset:0; background:var(--text); z-index:1000; }
+  .login-card { background:var(--card); border-radius:12px; padding:40px 48px; text-align:center; max-width:380px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); }
+  .login-card h2 { font-size:20px; font-weight:700; color:var(--text); margin-bottom:6px; }
+  .login-card p { font-size:13px; color:var(--muted); margin-bottom:28px; }
+  .btn-google { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:10px 16px; background:#fff; border:1px solid var(--border); border-radius:8px; font-size:14px; font-weight:600; color:var(--text); cursor:pointer; box-shadow:var(--shadow); }
+  .btn-google:hover { border-color:#bbb; background:#fafafa; }
+  .login-error { margin-top:16px; font-size:12px; color:var(--red); }
+  .btn-signout { background:rgba(255,255,255,.15); color:#fff; border:none; padding:5px 12px; border-radius:6px; font-size:12px; cursor:pointer; }
+  .btn-signout:hover { background:rgba(255,255,255,.25); }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+<div id="loginOverlay">
+  <div class="login-card">
+    <div style="font-size:32px;margin-bottom:10px;">📊</div>
+    <h2>FUB Leads Dashboard</h2>
+    <p>Internal admin access only</p>
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Sign in with Google
+    </button>
+    <div id="loginError" class="login-error" style="display:none;">Your account is not authorized to access this dashboard.</div>
+  </div>
+</div>
+
+<div id="app" style="display:none;">
 
 <div class="header">
   <div class="header-left">
@@ -163,6 +190,8 @@
   </div>
   <div style="display:flex;align-items:center;gap:16px;">
     <span class="sync-time" id="syncTime">Loading...</span>
+    <span id="userEmail" style="font-size:12px;color:rgba(255,255,255,.5);"></span>
+    <button onclick="signOut()" class="btn-signout">Sign Out</button>
   </div>
 </div>
 
@@ -207,7 +236,56 @@
   <div id="root"><div class="loading">Loading lead data...</div></div>
 </div>
 
+</div><!-- #app -->
+
 <script>
+// ── Auth ──────────────────────────────────────────────────────────────────────
+
+const SUPABASE_URL     = 'https://exjeqzhlkqzaajvypbgz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4amVxemhsa3F6YWFqdnlwYmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMjkyNTEsImV4cCI6MjA5MjgwNTI1MX0.ia0Ucd5uT0cDITuVHafF915Zbm2L3zApzrdq_QDCtv4';
+const ALLOWED_EMAILS   = ['ai@bostonlinkedre.com', 'joel@bostonlinkedre.com', 'ricky@bostonlinkedre.com'];
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: 'pkce' }
+});
+
+async function signInWithGoogle() {
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: location.origin + location.pathname }
+  });
+  if (error) alert('Sign-in failed: ' + error.message);
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  document.getElementById('userEmail').textContent = '';
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginOverlay').style.display = 'flex';
+}
+
+async function checkAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) {
+    document.getElementById('loginOverlay').style.display = 'flex';
+    return;
+  }
+  const email = session.user.email;
+  if (!ALLOWED_EMAILS.includes(email)) {
+    await sb.auth.signOut();
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginOverlay').style.display = 'flex';
+    return;
+  }
+  document.getElementById('userEmail').textContent = email;
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  init();
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+
 const PAGE_SIZE = 25;
 let allLeads = [];
 let allYGL   = [];
@@ -700,7 +778,7 @@ async function init() {
   }
 }
 
-init();
+checkAuth();
 </script>
 </body>
 </html>
