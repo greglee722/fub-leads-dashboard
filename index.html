@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advertising Report v0.3</title>
+<title>Advertising Report v0.4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -192,7 +192,7 @@
 <div class="header">
   <div class="header-left">
     <h1>Advertising Report</h1>
-    <span class="version">v0.3</span>
+    <span class="version">v0.4</span>
   </div>
   <div style="display:flex;align-items:center;gap:16px;">
     <span class="sync-time" id="syncTime">Loading...</span>
@@ -374,18 +374,18 @@ function getYesterdayLeads() {
 
 // ── Render ─────────────────────────────────────────────────────────────────────
 
-function getYGLAvgPrice(neighborhood, beds) {
-  const col = beds !== null ? BEDS_COLS.find(c => c.match(beds)) : null;
+function getLeadAvgPrice(neighborhood, beds) {
   const nbhd = (neighborhood || '').toLowerCase();
-  const matches = allYGL.filter(l => {
-    if (!l.neighborhood) return false;
-    const yn = l.neighborhood.toLowerCase();
-    const nameMatch = yn === nbhd || yn.includes(nbhd) || nbhd.includes(yn);
+  const col = beds !== null ? BEDS_COLS.find(c => c.match(beds)) : null;
+  const matches = allLeads.filter(l => {
+    if (!l.price || !l.zillow_url || !l.neighborhood) return false;
+    const ln = l.neighborhood.toLowerCase();
+    const nameMatch = ln === nbhd || ln.includes(nbhd) || nbhd.includes(ln);
     if (!nameMatch) return false;
     return col ? col.match(l.beds) : true;
   });
-  const prices = matches.map(l => l.price).filter(Boolean);
-  return prices.length ? Math.round(prices.reduce((s, p) => s + p, 0) / prices.length) : null;
+  if (!matches.length) return null;
+  return Math.round(matches.reduce((s, l) => s + l.price, 0) / matches.length);
 }
 
 function getTopRec() {
@@ -399,7 +399,7 @@ function getTopRec() {
   });
   const top = Object.values(groups).sort((a, b) => b.count - a.count)[0];
   if (!top) return null;
-  top.yglPrice = getYGLAvgPrice(top.neighborhood, top.beds);
+  top.price = getLeadAvgPrice(top.neighborhood, top.beds);
   return top;
 }
 
@@ -409,8 +409,8 @@ function renderStats(leads) {
   leads.forEach(l => { if (l.neighborhood) nbhds[l.neighborhood] = (nbhds[l.neighborhood] || 0) + 1; });
   const topNbhd = Object.entries(nbhds).sort((a, b) => b[1] - a[1])[0];
   const topRec = getTopRec();
-  const recPriceStr = topRec?.yglPrice ? ` · ${fmtPrice(topRec.yglPrice)}` : '';
-  const recPriceSrc = topRec ? (topRec.yglPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:2px;">Price via YGL</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:2px;">No price data available</div>') : '';
+  const recPriceStr = topRec?.price ? ` · ${fmtPrice(topRec.price)}` : '';
+  const recPriceSrc = topRec ? (topRec.price ? '<div style="font-size:10px;color:var(--muted);margin-top:2px;">Avg. Zillow listing price</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:2px;">No price data available</div>') : '';
 
   return `
     <div class="stats-row">
@@ -468,21 +468,18 @@ function renderRecommendations() {
   const groups = {};
   locLeads.forEach(l => {
     const key = `${l.neighborhood}|${l.beds !== null ? l.beds : '?'}`;
-    if (!groups[key]) groups[key] = { neighborhood: l.neighborhood, beds: l.beds, prices: [], count: 0 };
+    if (!groups[key]) groups[key] = { neighborhood: l.neighborhood, beds: l.beds, count: 0 };
     groups[key].count++;
-    if (l.price) groups[key].prices.push(l.price);
   });
 
   const sorted = Object.values(groups).sort((a, b) => b.count - a.count).slice(0, 3);
   const cards = sorted.map((g, i) => {
-    const fubPrice = g.prices.length ? Math.round(g.prices.reduce((s, p) => s + p, 0) / g.prices.length) : null;
-    const yglPrice = !fubPrice ? getYGLAvgPrice(g.neighborhood, g.beds) : null;
-    const displayPrice = fubPrice || yglPrice;
+    const displayPrice = getLeadAvgPrice(g.neighborhood, g.beds);
     const label = ['#1 Pick', '#2 Pick', '#3 Pick'][i];
     const bedsStr = bedsLabel(g.beds);
     const priceStr = displayPrice ? ` · avg ${fmtPrice(displayPrice)}` : '';
     const priceSrc = displayPrice
-      ? (yglPrice && !fubPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Price via YGL inventory</div>' : '')
+      ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Avg. Zillow listing price</div>'
       : '<div style="font-size:10px;color:var(--muted);margin-top:4px;">No price data available</div>';
     return `
       <div class="rec-card">
@@ -687,8 +684,9 @@ function render() {
   const yglHtml    = renderYGLSection();
   const heatHtml   = renderHeatTable(leads);
   const agentHtml  = renderAgentBreakdown(leads);
-  const cardsHtml  = renderLeadCards(leads);
-  const pageHtml   = renderPagination(leads.length);
+  const zillowLeads = leads.filter(l => l.zillow_url);
+  const cardsHtml  = renderLeadCards(zillowLeads);
+  const pageHtml   = renderPagination(zillowLeads.length);
 
   const locLeadCount = leads.filter(l => l.neighborhood).length;
   root.innerHTML = `
@@ -713,7 +711,7 @@ function render() {
     <div class="cards-section">
       <div class="section-header">
         <span class="section-title">Lead Cards</span>
-        <span class="section-sub">${leads.length} total · page ${currentPage}</span>
+        <span class="section-sub">${zillowLeads.length < leads.length ? `${zillowLeads.length} of ${leads.length} · Zillow listings only` : `${leads.length} total`} · page ${currentPage}</span>
       </div>
       <div class="cards-list">${cardsHtml}</div>
       ${pageHtml}
