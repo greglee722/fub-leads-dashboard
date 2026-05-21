@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-21T01:17:57.662Z",
+  "generated": "2026-05-21T01:20:14.859Z",
   "version": "0.2.0",
   "agents": [
     "Alejandro Cruz",
@@ -19327,5 +19327,234 @@
       "stage": "Lead"
     }
   ],
-  "yglListings": []
+  "yglListings": [
+    {
+      "id": "28022442",
+      "address": "400 Massachusetts Ave.",
+      "unit": "87",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 1,
+      "price": 2009,
+      "available_date": "08/15/2026",
+      "fee": true
+    },
+    {
+      "id": "40359333",
+      "address": "1126 Boylston St.",
+      "unit": "506",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 1,
+      "price": 3150,
+      "available_date": "06/01/2026",
+      "fee": true
+    },
+    {
+      "id": "40359537",
+      "address": "1126 Boylston St.",
+      "unit": "606",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 1,
+      "price": 2850,
+      "available_date": "06/01/2026",
+      "fee": true
+    },
+    {
+      "id": "290098057",
+      "address": "62 Boylston St.",
+      "unit": "L04",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2550,
+      "available_date": "07/01/2026",
+      "fee": true
+    },
+    {
+      "id": "246499622",
+      "address": "8 Winter St.",
+      "unit": "701",
+      "city": "Boston",
+      "zip": "02108",
+      "neighborhood": "Beacon Hill",
+      "beds": 0,
+      "price": 2600,
+      "available_date": "05/02/2026",
+      "fee": true
+    },
+    {
+      "id": "213007844",
+      "address": "8 Winter St.",
+      "unit": "401",
+      "city": "Boston",
+      "zip": "02108",
+      "neighborhood": "Beacon Hill",
+      "beds": 0,
+      "price": 2775,
+      "available_date": "06/01/2026",
+      "fee": true
+    },
+    {
+      "id": "202924407",
+      "address": "62 Boylston St.",
+      "unit": "L03",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2525,
+      "available_date": "08/01/2026",
+      "fee": true
+    },
+    {
+      "id": "202924188",
+      "address": "62 Boylston St.",
+      "unit": "M03",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2325,
+      "available_date": "05/01/2026",
+      "fee": true
+    },
+    {
+      "id": "202923643",
+      "address": "62 Boylston St.",
+      "unit": "M07",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2575,
+      "available_date": "08/01/2026",
+      "fee": true
+    },
+    {
+      "id": "202786235",
+      "address": "62 Boylston St.",
+      "unit": "M04",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2500,
+      "available_date": "07/01/2026",
+      "fee": true
+    },
+    {
+      "id": "202786113",
+      "address": "62 Boylston St.",
+      "unit": "L05",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2500,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "201952850",
+      "address": "62 Boylston St.",
+      "unit": "507",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2600,
+      "available_date": "07/01/2026",
+      "fee": true
+    },
+    {
+      "id": "201952741",
+      "address": "62 Boylston St.",
+      "unit": "109",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2595,
+      "available_date": "08/01/2026",
+      "fee": true
+    },
+    {
+      "id": "201638901",
+      "address": "62 Boylston St.",
+      "unit": "L02",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2595,
+      "available_date": "08/01/2026",
+      "fee": true
+    },
+    {
+      "id": "255220953",
+      "address": "1126 Boylston St.",
+      "unit": "503",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 1,
+      "price": 2800,
+      "available_date": "06/01/2026",
+      "fee": true
+    },
+    {
+      "id": "228496491",
+      "address": "1126 Boylston St.",
+      "unit": "604",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 1,
+      "price": 3050,
+      "available_date": "07/01/2026",
+      "fee": true
+    },
+    {
+      "id": "119251549",
+      "address": "62 Boylston St.",
+      "unit": "",
+      "city": "Boston",
+      "zip": "02116",
+      "neighborhood": "Back Bay",
+      "beds": 0,
+      "price": 2350,
+      "available_date": "03/01/2026",
+      "fee": true
+    },
+    {
+      "id": "40320963",
+      "address": "650 Columbus Ave.",
+      "unit": "623",
+      "city": "Boston",
+      "zip": "02118",
+      "neighborhood": "South End",
+      "beds": 1,
+      "price": 3600,
+      "available_date": "08/01/2026",
+      "fee": true
+    },
+    {
+      "id": "247391405",
+      "address": "1078 Boylston St.",
+      "unit": "2",
+      "city": "Boston",
+      "zip": "02115",
+      "neighborhood": "Fenway",
+      "beds": 1,
+      "price": 2825,
+      "available_date": "07/01/2026",
+      "fee": true
+    }
+  ]
 }
