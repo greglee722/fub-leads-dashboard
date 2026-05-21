@@ -27,6 +27,8 @@ jobs:
           FUB_API_KEY: ${{ secrets.FUB_API_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           YGL_API_KEY: ${{ secrets.YGL_API_KEY }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
 
       - name: Commit updated data.json
         run: |
