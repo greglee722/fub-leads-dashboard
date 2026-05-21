@@ -376,8 +376,12 @@ function getYesterdayLeads() {
 
 function getYGLAvgPrice(neighborhood, beds) {
   const col = beds !== null ? BEDS_COLS.find(c => c.match(beds)) : null;
+  const nbhd = (neighborhood || '').toLowerCase();
   const matches = allYGL.filter(l => {
-    if (l.neighborhood !== neighborhood) return false;
+    if (!l.neighborhood) return false;
+    const yn = l.neighborhood.toLowerCase();
+    const nameMatch = yn === nbhd || yn.includes(nbhd) || nbhd.includes(yn);
+    if (!nameMatch) return false;
     return col ? col.match(l.beds) : true;
   });
   const prices = matches.map(l => l.price).filter(Boolean);
