@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FUB Leads Dashboard v0.2</title>
+<title>FUB Leads Dashboard v0.3</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -47,7 +47,7 @@
   .main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
 
   /* Stats chips */
-  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
   .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; box-shadow: var(--shadow); }
   .stat-card .label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
   .stat-card .value { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; }
@@ -159,7 +159,7 @@
 <div class="header">
   <div class="header-left">
     <h1>FUB Leads Dashboard</h1>
-    <span class="version">v0.2</span>
+    <span class="version">v0.3</span>
   </div>
   <div style="display:flex;align-items:center;gap:16px;">
     <span class="sync-time" id="syncTime">Loading...</span>
@@ -290,14 +290,39 @@ function getYesterdayLeads() {
 
 // ── Render ─────────────────────────────────────────────────────────────────────
 
+function getYGLAvgPrice(neighborhood, beds) {
+  const col = beds !== null ? BEDS_COLS.find(c => c.match(beds)) : null;
+  const matches = allYGL.filter(l => {
+    if (l.neighborhood !== neighborhood) return false;
+    return col ? col.match(l.beds) : true;
+  });
+  const prices = matches.map(l => l.price).filter(Boolean);
+  return prices.length ? Math.round(prices.reduce((s, p) => s + p, 0) / prices.length) : null;
+}
+
+function getTopRec() {
+  const leads = getYesterdayLeads().filter(l => l.neighborhood);
+  if (!leads.length) return null;
+  const groups = {};
+  leads.forEach(l => {
+    const key = `${l.neighborhood}|${l.beds !== null ? l.beds : '?'}`;
+    if (!groups[key]) groups[key] = { neighborhood: l.neighborhood, beds: l.beds, count: 0 };
+    groups[key].count++;
+  });
+  const top = Object.values(groups).sort((a, b) => b.count - a.count)[0];
+  if (!top) return null;
+  top.yglPrice = getYGLAvgPrice(top.neighborhood, top.beds);
+  return top;
+}
+
 function renderStats(leads) {
   const total = leads.length;
-  const agents = new Set(leads.map(l => l.agent).filter(Boolean));
   const nbhds = {};
   leads.forEach(l => { if (l.neighborhood) nbhds[l.neighborhood] = (nbhds[l.neighborhood] || 0) + 1; });
   const topNbhd = Object.entries(nbhds).sort((a, b) => b[1] - a[1])[0];
-  const prices = leads.map(l => l.price).filter(Boolean);
-  const avgPrice = prices.length ? Math.round(prices.reduce((s, p) => s + p, 0) / prices.length) : null;
+  const topRec = getTopRec();
+  const recPriceStr = topRec?.yglPrice ? ` · ${fmtPrice(topRec.yglPrice)}` : '';
+  const recPriceSrc = topRec?.yglPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:2px;">Price via YGL</div>' : '';
 
   return `
     <div class="stats-row">
@@ -307,19 +332,15 @@ function renderStats(leads) {
         <div class="sub">${currentDate === 'yesterday' ? 'yesterday' : currentDate === '7d' ? 'last 7 days' : currentDate === '30d' ? 'last 30 days' : 'all time'}</div>
       </div>
       <div class="stat-card">
-        <div class="label">Active Agents</div>
-        <div class="value">${agents.size}</div>
-        <div class="sub">${agents.size === 1 ? '1 agent received leads' : agents.size + ' agents received leads'}</div>
-      </div>
-      <div class="stat-card">
         <div class="label">Top Neighborhood</div>
         <div class="value" style="font-size:18px;line-height:1.2;">${topNbhd ? topNbhd[0] : '—'}</div>
         <div class="sub">${topNbhd ? topNbhd[1] + ' leads' : 'no data'}</div>
       </div>
       <div class="stat-card">
-        <div class="label">Avg Price</div>
-        <div class="value">${avgPrice ? fmtPrice(avgPrice) : '—'}</div>
-        <div class="sub">${prices.length ? 'from ' + prices.length + ' listings' : 'no price data yet'}</div>
+        <div class="label">Top Ad Recommendation</div>
+        <div class="value" style="font-size:16px;line-height:1.2;">${topRec ? bedsLabel(topRec.beds) + ' in ' + topRec.neighborhood : '—'}</div>
+        <div class="sub">${topRec ? topRec.count + ' lead' + (topRec.count !== 1 ? 's' : '') + ' yesterday' + recPriceStr : 'no data'}</div>
+        ${recPriceSrc}
       </div>
     </div>`;
 }
@@ -366,15 +387,19 @@ function renderRecommendations() {
 
   const sorted = Object.values(groups).sort((a, b) => b.count - a.count).slice(0, 3);
   const cards = sorted.map((g, i) => {
-    const avgPr = g.prices.length ? Math.round(g.prices.reduce((s, p) => s + p, 0) / g.prices.length) : null;
+    const fubPrice = g.prices.length ? Math.round(g.prices.reduce((s, p) => s + p, 0) / g.prices.length) : null;
+    const yglPrice = !fubPrice ? getYGLAvgPrice(g.neighborhood, g.beds) : null;
+    const displayPrice = fubPrice || yglPrice;
     const label = ['#1 Pick', '#2 Pick', '#3 Pick'][i];
     const bedsStr = bedsLabel(g.beds);
-    const priceStr = avgPr ? ` · avg ${fmtPrice(avgPr)}` : '';
+    const priceStr = displayPrice ? ` · avg ${fmtPrice(displayPrice)}` : '';
+    const priceSrc = yglPrice && !fubPrice ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">Price via YGL inventory</div>' : '';
     return `
       <div class="rec-card">
         <div class="rec-rank">${label}</div>
         <div class="rec-main">${bedsStr} in ${g.neighborhood}</div>
         <div class="rec-sub">${g.count} lead${g.count !== 1 ? 's' : ''} yesterday${priceStr}</div>
+        ${priceSrc}
       </div>`;
   }).join('');
 
