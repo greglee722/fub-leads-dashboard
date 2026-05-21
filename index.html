@@ -378,7 +378,7 @@ function getLeadAvgPrice(neighborhood, beds) {
   const nbhd = (neighborhood || '').toLowerCase();
   const col = beds !== null ? BEDS_COLS.find(c => c.match(beds)) : null;
   const matches = allLeads.filter(l => {
-    if (!l.price || !l.zillow_url || !l.neighborhood) return false;
+    if (!l.price || !l.address || !l.neighborhood) return false;
     const ln = l.neighborhood.toLowerCase();
     const nameMatch = ln === nbhd || ln.includes(nbhd) || nbhd.includes(ln);
     if (!nameMatch) return false;
@@ -715,7 +715,7 @@ function render() {
   const yglHtml    = renderYGLSection();
   const heatHtml   = renderHeatTable(leads);
   const agentHtml  = renderAgentBreakdown(leads);
-  const zillowLeads = leads.filter(l => l.zillow_url);
+  const zillowLeads = leads.filter(l => l.address);
   const cardsHtml  = renderLeadCards(zillowLeads);
   const pageHtml   = renderPagination(zillowLeads.length);
 
@@ -742,7 +742,7 @@ function render() {
     <div class="cards-section">
       <div class="section-header">
         <span class="section-title">Lead Cards</span>
-        <span class="section-sub">${zillowLeads.length < leads.length ? `${zillowLeads.length} of ${leads.length} · Zillow listings only` : `${leads.length} total`} · page ${currentPage}</span>
+        <span class="section-sub">${zillowLeads.length < leads.length ? `${zillowLeads.length} of ${leads.length} · listing inquiries only` : `${leads.length} total`} · page ${currentPage}</span>
       </div>
       <div class="cards-list">${cardsHtml}</div>
       ${pageHtml}
