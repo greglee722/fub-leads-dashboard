@@ -107,6 +107,24 @@
   .price-cell { font-weight: 700; color: var(--green); font-size: 13px; }
   .price-na { color: #ccc; font-size: 12px; }
 
+  /* Move-in demand table */
+  .movein-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px; }
+  .movein-table { width: 100%; border-collapse: collapse; }
+  .movein-table th { padding: 10px 12px; font-size: 11px; font-weight: 700; color: #5b21b6; text-align: center; background: #f8f5ff; border-bottom: 1px solid #e9e0ff; letter-spacing: .5px; text-transform: uppercase; }
+  .movein-table th:first-child { text-align: left; }
+  .movein-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f0ecf9; text-align: center; min-width: 80px; vertical-align: top; transition: background var(--transition); }
+  .movein-table td:first-child { font-weight: 600; text-align: left; color: var(--text); }
+  .movein-table tr:hover td { background: #faf8ff; }
+  .movein-table tr:last-child td { border-bottom: none; }
+  .month-tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; margin: 1px 2px; white-space: nowrap; }
+  .month-sep { background: #fee2e2; color: #991b1b; }
+  .month-aug { background: #fef3c7; color: #92400e; }
+  .month-jul { background: #d1fae5; color: #065f46; }
+  .month-jun { background: #dbeafe; color: #1e40af; }
+  .month-other { background: #f3e8ff; color: #6b21a8; }
+  .movein-empty { color: #cbd5e1; font-size: 12px; }
+  .movein-note { padding: 10px 22px; font-size: 11px; color: var(--muted); border-top: 1px solid #f0ecf9; }
+
   /* View toggle */
   .view-toggle { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-left: auto; }
   .view-toggle button { background: var(--card); border: none; border-right: 1px solid var(--border); padding: 5px 14px; font-size: 12px; font-family: var(--font-body); font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all var(--transition); }
@@ -206,8 +224,8 @@
     .rec-card { padding: 12px 14px; }
     .two-col { gap: 14px; margin-bottom: 14px; }
     .section-header { padding: 12px 14px; }
-    .heat-section, .agent-section, .price-section, .cards-section, .ygl-section { overflow-x: auto; }
-    .heat-table, .price-table, .ygl-table { min-width: 420px; }
+    .heat-section, .agent-section, .price-section, .movein-section, .cards-section, .ygl-section { overflow-x: auto; }
+    .heat-table, .price-table, .movein-table, .ygl-table { min-width: 420px; }
     .heat-table td, .heat-table th { padding: 8px 8px; font-size: 12px; }
     .price-table td, .price-table th { padding: 8px 8px; font-size: 12px; }
     .ygl-table td, .ygl-table th { padding: 7px 8px; font-size: 12px; }
@@ -732,6 +750,67 @@ function renderPriceTable() {
   </div>`;
 }
 
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTH_CLASSES = { Jan:'month-other', Feb:'month-other', Mar:'month-other', Apr:'month-other',
+  May:'month-other', Jun:'month-jun', Jul:'month-jul', Aug:'month-aug', Sep:'month-sep',
+  Oct:'month-other', Nov:'month-other', Dec:'month-other' };
+
+function renderMoveInTable(leads) {
+  // Group by neighborhood × beds → move-in month counts
+  const matrix = {}; // neighborhood → bedsKey → { month → count }
+  let total = 0;
+  leads.forEach(l => {
+    if (!l.move_in || !l.neighborhood || l.beds === null || l.beds === undefined) return;
+    const d = new Date(l.move_in + 'T12:00:00Z');
+    if (isNaN(d.getTime())) return;
+    const monthKey = MONTH_NAMES[d.getUTCMonth()];
+    total++;
+    if (!matrix[l.neighborhood]) matrix[l.neighborhood] = {};
+    BEDS_COLS.forEach(col => {
+      if (col.match(l.beds)) {
+        if (!matrix[l.neighborhood][col.key]) matrix[l.neighborhood][col.key] = {};
+        matrix[l.neighborhood][col.key][monthKey] = (matrix[l.neighborhood][col.key][monthKey] || 0) + 1;
+      }
+    });
+  });
+
+  const nbhds = Object.keys(matrix).sort();
+  if (!nbhds.length) return '';
+
+  const cols = BEDS_COLS.filter(c => nbhds.some(n => matrix[n]?.[c.key] && Object.keys(matrix[n][c.key]).length));
+  const headers = cols.map(c => `<th>${c.label}</th>`).join('');
+
+  const rows = nbhds.map(n => {
+    const cells = cols.map(c => {
+      const months = matrix[n]?.[c.key] || {};
+      const sorted = Object.entries(months).sort((a, b) => b[1] - a[1]);
+      if (!sorted.length) return '<td><span class="movein-empty">—</span></td>';
+      const tags = sorted.map(([m, cnt]) => `<span class="month-tag ${MONTH_CLASSES[m] || 'month-other'}">${m} ×${cnt}</span>`).join(' ');
+      return `<td>${tags}</td>`;
+    }).join('');
+    return `<tr><td>${n}</td>${cells}</tr>`;
+  }).join('');
+
+  const withMoveIn = leads.filter(l => l.move_in).length;
+  const pct = leads.length ? Math.round(withMoveIn / leads.length * 100) : 0;
+
+  return `<div class="movein-section">
+    <div class="section-header" style="border-bottom-color:#e9e0ff;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:4px;height:24px;background:#7c3aed;border-radius:2px;"></div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="section-title" style="color:#7c3aed;">Move-In Demand by Neighborhood & Beds</span>
+      </div>
+      <span class="section-sub">${total} leads with move-in date (${pct}% of filtered)</span>
+    </div>
+    <table class="movein-table">
+      <thead><tr><th>Neighborhood</th>${headers}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="movein-note">Requested move-in months from Zillow lead inquiries. Colored by month.</div>
+  </div>`;
+}
+
 function renderAgentBreakdown(leads) {
   const counts = {};
   leads.forEach(l => { if (l.agent) counts[l.agent] = (counts[l.agent] || 0) + 1; });
@@ -851,6 +930,7 @@ function render() {
   const statsHtml  = renderStats(leads);
   const recsHtml   = renderRecommendations();
   const priceHtml  = renderPriceTable();
+  const moveinHtml = renderMoveInTable(leads);
   const heatHtml   = renderHeatTable(leads);
   const agentHtml  = renderAgentBreakdown(leads);
   const zillowLeads = leads.filter(l => l.address);
@@ -877,6 +957,7 @@ function render() {
       </div>
     </div>
     ${priceHtml}
+    ${moveinHtml}
     <div class="cards-section">
       <div class="section-header">
         <span class="section-title">Lead Cards</span>

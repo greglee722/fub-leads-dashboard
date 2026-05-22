@@ -27,26 +27,27 @@ const ZIP_NEIGHBORHOODS = {
 // Mon → pull Fri+Sat+Sun; Tue–Fri → pull yesterday
 // Set BACKFILL_DAYS=30 env var for a one-time historical backfill
 function getDateRange() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // All boundaries in Eastern time so fetched leads match stored lead_date
+  const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }); // YYYY-MM-DD
 
   const backfillDays = process.env.BACKFILL_DAYS ? parseInt(process.env.BACKFILL_DAYS, 10) : null;
   if (backfillDays) {
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - backfillDays);
-    return { startDate, endDate: today };
+    const d = new Date(todayStr + 'T12:00:00Z'); // noon UTC avoids DST edge cases
+    d.setUTCDate(d.getUTCDate() - backfillDays);
+    return { startDate: d.toISOString().split('T')[0], endDate: todayStr };
   }
 
-  const startDate = new Date(today);
-  const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon...6=Sat
+  const todayDate = new Date(todayStr + 'T12:00:00Z');
+  const dayOfWeek = todayDate.getUTCDay(); // 0=Sun, 1=Mon...6=Sat
 
+  const startDate = new Date(todayDate);
   if (dayOfWeek === 1) {
-    startDate.setDate(today.getDate() - 3); // back to Friday
+    startDate.setUTCDate(todayDate.getUTCDate() - 3); // back to Friday
   } else {
-    startDate.setDate(today.getDate() - 1); // yesterday
+    startDate.setUTCDate(todayDate.getUTCDate() - 1); // yesterday
   }
 
-  return { startDate, endDate: today };
+  return { startDate: startDate.toISOString().split('T')[0], endDate: todayStr };
 }
 
 function httpsGet(url, apiKey) {
@@ -172,24 +173,45 @@ function normalizeBeds(raw) {
   return isNaN(n) || n < 0 ? null : n;
 }
 
+// Parse move-in date from FUB event description (Zillow structured data).
+// Format: "Move in: Aug 01, 2026 | Credit score: ..."
+function parseMoveInDate(description) {
+  if (!description) return null;
+  const match = description.match(/Move in:\s*([A-Za-z]+ \d{1,2},?\s*\d{4})/i);
+  if (!match) return null;
+  const d = new Date(match[1]);
+  if (isNaN(d.getTime())) return null;
+  return d.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
 // Fetch Property Inquiry events for a person and extract the best property data.
 // FUB events have a `property` object with street, city, state, code (ZIP), bedrooms, price, url.
+// Also extracts move-in date from event description (Zillow structured data).
 async function fetchPropertyData(apiKey, personId) {
   try {
     const data = await httpsGet(
       `https://api.followupboss.com/v1/events?personId=${personId}&limit=20`,
       apiKey
     );
-    const events = (data.events || []).filter(e => e.property != null);
-    if (!events.length) return null;
+    const allEvents = data.events || [];
+
+    // Extract move-in from any event description
+    let moveIn = null;
+    for (const e of allEvents) {
+      moveIn = parseMoveInDate(e.description);
+      if (moveIn) break;
+    }
+
+    const events = allEvents.filter(e => e.property != null);
+    if (!events.length) return { property: null, moveIn };
     // Prefer the event with the most data
     events.sort((a, b) => {
       const score = e => (e.property.street ? 2 : 0) + (e.property.bedrooms != null ? 1 : 0);
       return score(b) - score(a);
     });
-    return events[0].property;
+    return { property: events[0].property, moveIn };
   } catch {
-    return null;
+    return { property: null, moveIn: null };
   }
 }
 
@@ -199,6 +221,7 @@ function propertyToAddress(prop) {
 }
 
 async function fetchFubPeople(apiKey, startDate, endDate) {
+  // startDate/endDate are YYYY-MM-DD strings in Eastern time
   const results = [];
   let offset = 0;
   const limit = 100;
@@ -214,9 +237,9 @@ async function fetchFubPeople(apiKey, startDate, endDate) {
 
     let hitOldDate = false;
     for (const p of people) {
-      const created = new Date(p.created);
-      if (created < startDate) { hitOldDate = true; break; }
-      if (created < endDate) results.push(p);
+      const easternDate = toEasternDate(p.created);
+      if (!easternDate || easternDate < startDate) { hitOldDate = true; break; }
+      if (easternDate < endDate) results.push(p);
     }
 
     if (hitOldDate || people.length < limit) break;
@@ -235,7 +258,7 @@ function toEasternDate(isoString) {
 }
 
 async function processLead(person, apiKey) {
-  const prop = await fetchPropertyData(apiKey, person.id);
+  const { property: prop, moveIn } = await fetchPropertyData(apiKey, person.id);
   const address = propertyToAddress(prop) || null;
   const zip = prop?.code || extractZip(address);
 
@@ -252,6 +275,7 @@ async function processLead(person, apiKey) {
     lead_name: person.name || [person.firstName, person.lastName].filter(Boolean).join(' ') || null,
     source: person.source || null,
     stage: person.stage || null,
+    move_in: moveIn || null,
   };
 }
 
@@ -271,9 +295,11 @@ async function ensureTable(client) {
       lead_name    VARCHAR,
       source       VARCHAR,
       stage        VARCHAR,
+      move_in      DATE,
       created_at   TIMESTAMP DEFAULT NOW()
     )
   `);
+  await client.query(`ALTER TABLE fub_leads ADD COLUMN IF NOT EXISTS move_in DATE`);
   await client.query(`CREATE INDEX IF NOT EXISTS idx_fub_leads_date ON fub_leads(lead_date)`);
   await client.query(`CREATE INDEX IF NOT EXISTS idx_fub_leads_agent ON fub_leads(agent_name)`);
   await client.query(`CREATE INDEX IF NOT EXISTS idx_fub_leads_neighborhood ON fub_leads(neighborhood)`);
@@ -298,8 +324,8 @@ async function upsertLeads(client, leads) {
     if (lead.source && EXCLUDED_SOURCES.includes(lead.source)) continue;
     await client.query(`
       INSERT INTO fub_leads
-        (fub_id, agent_name, lead_date, address, zip, neighborhood, beds, price, zillow_url, lead_name, source, stage)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+        (fub_id, agent_name, lead_date, address, zip, neighborhood, beds, price, zillow_url, lead_name, source, stage, move_in)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
       ON CONFLICT (fub_id) DO UPDATE SET
         agent_name   = EXCLUDED.agent_name,
         lead_date    = EXCLUDED.lead_date,
@@ -311,11 +337,12 @@ async function upsertLeads(client, leads) {
         zillow_url   = COALESCE(EXCLUDED.zillow_url, fub_leads.zillow_url),
         lead_name    = EXCLUDED.lead_name,
         source       = EXCLUDED.source,
-        stage        = EXCLUDED.stage
+        stage        = EXCLUDED.stage,
+        move_in      = COALESCE(EXCLUDED.move_in, fub_leads.move_in)
     `, [
       lead.fub_id, lead.agent_name, lead.lead_date, lead.address, lead.zip,
       lead.neighborhood, lead.beds, lead.price, lead.zillow_url,
-      lead.lead_name, lead.source, lead.stage,
+      lead.lead_name, lead.source, lead.stage, lead.move_in,
     ]);
   }
   console.log(`  Upserted ${leads.length} leads`);
@@ -481,7 +508,7 @@ async function generateDataJson(client, yglListings = []) {
 
   const { rows } = await client.query(`
     SELECT id, fub_id, agent_name, lead_date, address, zip, neighborhood,
-           beds, price, zillow_url, lead_name, source, stage
+           beds, price, zillow_url, lead_name, source, stage, move_in
     FROM fub_leads
     WHERE lead_date >= $1
       AND (source IS NULL OR source NOT IN ('Website', 'Apartments.com'))
@@ -504,6 +531,9 @@ async function generateDataJson(client, yglListings = []) {
     lead_name: r.lead_name,
     source: r.source,
     stage: r.stage,
+    move_in: r.move_in instanceof Date
+      ? r.move_in.toISOString().split('T')[0]
+      : r.move_in ? String(r.move_in).split('T')[0] : null,
   }));
 
   const agents = [...new Set(leads.map(l => l.agent).filter(Boolean))].sort();
@@ -574,7 +604,7 @@ async function main() {
 
   const { startDate, endDate } = getDateRange();
   console.log(`FUB Leads Dashboard Sync v${VERSION}`);
-  console.log(`Date range: ${startDate.toISOString().split('T')[0]} → ${endDate.toISOString().split('T')[0]}`);
+  console.log(`Date range: ${startDate} → ${endDate} (Eastern)`);
 
   console.log('\nFetching leads from FUB...');
   const people = await fetchFubPeople(apiKey, startDate, endDate);
