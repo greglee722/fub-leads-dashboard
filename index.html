@@ -794,6 +794,42 @@ function renderMoveInTable(leads) {
   const withMoveIn = leads.filter(l => l.move_in).length;
   const pct = leads.length ? Math.round(withMoveIn / leads.length * 100) : 0;
 
+  // Leads with move-in but no neighborhood — grouped by move-in month
+  const unassigned = leads.filter(l => l.move_in && !l.neighborhood);
+  let unassignedHtml = '';
+  if (unassigned.length) {
+    const byMonth = {};
+    unassigned.forEach(l => {
+      const d = new Date(l.move_in + 'T12:00:00Z');
+      if (isNaN(d.getTime())) return;
+      const key = MONTH_NAMES[d.getUTCMonth()];
+      if (!byMonth[key]) byMonth[key] = [];
+      byMonth[key].push(l);
+    });
+    const sortedMonths = Object.keys(byMonth).sort((a, b) => MONTH_NAMES.indexOf(a) - MONTH_NAMES.indexOf(b));
+    const groups = sortedMonths.map(m => {
+      const cls = MONTH_CLASSES[m] || 'month-other';
+      const leadRows = byMonth[m].map(l => {
+        const fmtMoveIn = new Date(l.move_in + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const fubLink = l.fub_id ? `<a class="link-btn" href="https://app.followupboss.com/2/people/view/${l.fub_id}" target="_blank" style="font-size:11px;padding:3px 10px;">FUB →</a>` : '';
+        return `<div style="display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+          <span style="flex:1;color:var(--text);font-weight:600;">${l.lead_name || '—'}</span>
+          <span style="color:var(--muted);min-width:120px;">${l.agent || '—'}</span>
+          <span style="color:var(--muted);min-width:100px;">${fmtMoveIn}</span>
+          ${fubLink}
+        </div>`;
+      }).join('');
+      return `<div style="margin-bottom:12px;">
+        <div style="margin-bottom:6px;"><span class="month-tag ${cls}" style="font-size:12px;">${m} — ${byMonth[m].length} lead${byMonth[m].length !== 1 ? 's' : ''}</span></div>
+        ${leadRows}
+      </div>`;
+    }).join('');
+    unassignedHtml = `<div style="margin-top:16px;padding:16px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;">
+      <div style="font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:12px;">${unassigned.length} lead${unassigned.length !== 1 ? 's' : ''} with move-in but no neighborhood</div>
+      ${groups}
+    </div>`;
+  }
+
   return `<div class="movein-section">
     <div class="section-header" style="border-bottom-color:#e9e0ff;">
       <div style="display:flex;align-items:center;gap:10px;">
@@ -808,6 +844,7 @@ function renderMoveInTable(leads) {
       <tbody>${rows}</tbody>
     </table>
     <div class="movein-note">Requested move-in months from Zillow lead inquiries. Colored by month.</div>
+    ${unassignedHtml}
   </div>`;
 }
 
