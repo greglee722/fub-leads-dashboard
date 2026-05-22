@@ -58,6 +58,8 @@ function httpsGet(url, apiKey) {
         Authorization: `Basic ${auth}`,
         Accept: 'application/json',
         'User-Agent': `fub-leads-dashboard/${VERSION}`,
+        'X-System': 'fub-leads-dashboard',
+        'X-System-Key': 'fub-leads-dashboard-zillow-ads',
       },
     }, (res) => {
       let data = '';
@@ -210,7 +212,8 @@ async function fetchPropertyData(apiKey, personId) {
       return score(b) - score(a);
     });
     return { property: events[0].property, moveIn };
-  } catch {
+  } catch (err) {
+    if (String(err.message || '').includes('429')) console.warn(`    Rate limited on person ${personId}`);
     return { property: null, moveIn: null };
   }
 }
@@ -569,10 +572,10 @@ async function enrichNullAddressLeads(client, apiKey) {
 
   let enriched = 0;
   for (const { fub_id } of rows) {
-    const prop = await fetchPropertyData(apiKey, fub_id);
+    const { property: prop, moveIn } = await fetchPropertyData(apiKey, fub_id);
     const address = prop ? (propertyToAddress(prop) || null) : null;
 
-    if (address) {
+    if (address || moveIn) {
       const zip = prop?.code || extractZip(address);
       const neighborhood = getNeighborhood(zip);
       const beds = prop?.bedrooms != null ? normalizeBeds(prop.bedrooms) : null;
@@ -580,20 +583,57 @@ async function enrichNullAddressLeads(client, apiKey) {
       const zillow_url = (prop?.url && String(prop.url).includes('zillow')) ? prop.url : null;
       await client.query(`
         UPDATE fub_leads SET
-          address      = COALESCE(address, $1),
-          zip          = COALESCE(zip, $2),
-          neighborhood = COALESCE(neighborhood, $3),
-          beds         = COALESCE(beds, $4),
-          price        = COALESCE(price, $5),
-          zillow_url   = COALESCE(zillow_url, $6)
+          address      = COALESCE($1, address),
+          zip          = COALESCE($2, zip),
+          neighborhood = COALESCE($3, neighborhood),
+          beds         = COALESCE($4, beds),
+          price        = COALESCE($5, price),
+          zillow_url   = COALESCE($6, zillow_url),
+          move_in      = COALESCE($8, move_in)
         WHERE fub_id = $7 AND address IS NULL
-      `, [address, zip, neighborhood, beds, price, zillow_url, fub_id]);
+      `, [address, zip, neighborhood, beds, price, zillow_url, fub_id, moveIn]);
       enriched++;
     }
 
-    await new Promise(r => setTimeout(r, 700));
+    await new Promise(r => setTimeout(r, 1200));
   }
   console.log(`  Enriched ${enriched}/${rows.length} lead(s)`);
+}
+
+async function enrichNullMoveInLeads(client, apiKey) {
+  const { rows } = await client.query(`
+    SELECT fub_id FROM fub_leads
+    WHERE move_in IS NULL
+      AND lead_date >= CURRENT_DATE - INTERVAL '14 days'
+      AND (source IS NULL OR source NOT IN ('Website', 'Apartments.com'))
+    ORDER BY lead_date DESC
+  `);
+
+  if (!rows.length) { console.log('  No null-move_in leads to enrich'); return; }
+  console.log(`  Checking ${rows.length} lead(s) for move-in dates (last 14 days)...`);
+
+  let enriched = 0;
+  let errors = 0;
+  for (let i = 0; i < rows.length; i++) {
+    const { fub_id } = rows[i];
+    const { moveIn } = await fetchPropertyData(apiKey, fub_id);
+
+    if (moveIn) {
+      await client.query(`
+        UPDATE fub_leads SET move_in = $1
+        WHERE fub_id = $2 AND move_in IS NULL
+      `, [moveIn, fub_id]);
+      enriched++;
+    }
+
+    // Progress log every 100 leads
+    if ((i + 1) % 100 === 0 || i === rows.length - 1) {
+      console.log(`  ${i + 1}/${rows.length} checked, ${enriched} enriched`);
+    }
+
+    await new Promise(r => setTimeout(r, 1200));
+  }
+  console.log(`  Enriched ${enriched}/${rows.length} lead(s) with move-in date`);
 }
 
 async function main() {
@@ -617,12 +657,12 @@ async function main() {
 
   if (people.length > 0) {
     console.log('\nFetching property data from events...');
-    // Batch event fetches to avoid FUB rate limits
-    // Backfill (large sets): 3 concurrent, 1s between batches (~180 req/min)
-    // Daily sync (small sets): 10 concurrent, 200ms between batches
+    // Batch event fetches to avoid FUB rate limits (~100 req/min unregistered)
+    // Backfill (large sets): 3 concurrent, 1s between batches
+    // Daily sync (small sets): 5 concurrent, 400ms between batches (~75 req/min)
     const isBackfill = people.length > 100;
-    const BATCH = isBackfill ? 3 : 10;
-    const DELAY = isBackfill ? 1000 : 200;
+    const BATCH = isBackfill ? 3 : 5;
+    const DELAY = isBackfill ? 1000 : 400;
     const leads = [];
     for (let i = 0; i < people.length; i += BATCH) {
       const batch = people.slice(i, i + BATCH);
@@ -636,7 +676,8 @@ async function main() {
     }
     const withAddress = leads.filter(l => l.address).length;
     const withBeds = leads.filter(l => l.beds !== null).length;
-    console.log(`  ${withAddress}/${leads.length} have address | ${withBeds}/${leads.length} have beds`);
+    const withMoveIn = leads.filter(l => l.move_in).length;
+    console.log(`  ${withAddress}/${leads.length} have address | ${withBeds}/${leads.length} have beds | ${withMoveIn}/${leads.length} have move-in`);
     console.log('\nUpserting to database...');
     await upsertLeads(client, leads);
   } else {
@@ -646,6 +687,11 @@ async function main() {
   if (!process.env.BACKFILL_DAYS) {
     console.log('\nEnriching null-address leads...');
     await enrichNullAddressLeads(client, apiKey);
+
+    // Pause before move-in enrichment to avoid FUB rate limits after prior API calls
+    console.log('\nEnriching null-move_in leads (30s cooldown)...');
+    await new Promise(r => setTimeout(r, 30000));
+    await enrichNullMoveInLeads(client, apiKey);
   }
 
   const rapidApiKey = process.env.RAPIDAPI_KEY;
