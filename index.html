@@ -783,7 +783,7 @@ function renderMoveInTable(leads) {
   const rows = nbhds.map(n => {
     const cells = cols.map(c => {
       const months = matrix[n]?.[c.key] || {};
-      const sorted = Object.entries(months).sort((a, b) => b[1] - a[1]);
+      const sorted = Object.entries(months).sort((a, b) => MONTH_NAMES.indexOf(a[0]) - MONTH_NAMES.indexOf(b[0]));
       if (!sorted.length) return '<td><span class="movein-empty">—</span></td>';
       const tags = sorted.map(([m, cnt]) => `<span class="month-tag ${MONTH_CLASSES[m] || 'month-other'}">${m} ×${cnt}</span>`).join(' ');
       return `<td>${tags}</td>`;
