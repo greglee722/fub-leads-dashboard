@@ -995,7 +995,7 @@ function render() {
   const nbhdOpts = cardNbhds.map(n => `<option value="${n}" ${cardNbhd === n ? 'selected' : ''}>${n}</option>`).join('');
   const bedOpts = cardBedOpts.map(b => `<option value="${b}" ${cardBeds === String(b) ? 'selected' : ''}>${bedsLabel(b)}</option>`).join('');
 
-  const cardFiltersHtml = `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+  const cardFiltersHtml = `<div style="display:flex;gap:10px;flex-wrap:wrap;padding:14px 22px;border-bottom:1px solid var(--border);">
     <select onchange="setCardAgent(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--card-bg);color:var(--text);cursor:pointer;">
       <option value="">All Agents</option>${agentOpts}
     </select>
