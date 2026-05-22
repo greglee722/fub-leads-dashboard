@@ -386,6 +386,9 @@ let currentDate = 'yesterday';
 let currentBeds = null;
 let currentPage = 1;
 let currentView = 'dashboard';
+let cardAgent = '';
+let cardNbhd = '';
+let cardBeds = '';
 
 // ── Utilities ────────────────────────────────────────────────────────────────
 
@@ -969,8 +972,41 @@ function render() {
   const heatHtml   = renderHeatTable(leads);
   const agentHtml  = renderAgentBreakdown(leads);
   const zillowLeads = leads.filter(l => l.address);
-  const cardsHtml  = renderLeadCards(zillowLeads);
-  const pageHtml   = renderPagination(zillowLeads.length);
+
+  // Card-specific filters
+  let filteredCards = zillowLeads;
+  if (cardAgent) filteredCards = filteredCards.filter(l => l.agent === cardAgent);
+  if (cardNbhd) filteredCards = filteredCards.filter(l => l.neighborhood === cardNbhd);
+  if (cardBeds) {
+    const b = parseInt(cardBeds);
+    if (b === 3) filteredCards = filteredCards.filter(l => l.beds !== null && l.beds >= 3);
+    else filteredCards = filteredCards.filter(l => l.beds === b);
+  }
+
+  const cardsHtml  = renderLeadCards(filteredCards);
+  const pageHtml   = renderPagination(filteredCards.length);
+
+  // Build card filter dropdowns from available data
+  const cardAgents = [...new Set(zillowLeads.map(l => l.agent).filter(Boolean))].sort();
+  const cardNbhds = [...new Set(zillowLeads.map(l => l.neighborhood).filter(Boolean))].sort();
+  const cardBedOpts = [...new Set(zillowLeads.map(l => l.beds).filter(b => b !== null))].sort((a, b) => a - b);
+
+  const agentOpts = cardAgents.map(a => `<option value="${a}" ${cardAgent === a ? 'selected' : ''}>${a}</option>`).join('');
+  const nbhdOpts = cardNbhds.map(n => `<option value="${n}" ${cardNbhd === n ? 'selected' : ''}>${n}</option>`).join('');
+  const bedOpts = cardBedOpts.map(b => `<option value="${b}" ${cardBeds === String(b) ? 'selected' : ''}>${bedsLabel(b)}</option>`).join('');
+
+  const cardFiltersHtml = `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+    <select onchange="setCardAgent(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--card-bg);color:var(--text);cursor:pointer;">
+      <option value="">All Agents</option>${agentOpts}
+    </select>
+    <select onchange="setCardNbhd(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--card-bg);color:var(--text);cursor:pointer;">
+      <option value="">All Neighborhoods</option>${nbhdOpts}
+    </select>
+    <select onchange="setCardBeds(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--card-bg);color:var(--text);cursor:pointer;">
+      <option value="">All Beds</option>${bedOpts}
+    </select>
+    ${(cardAgent || cardNbhd || cardBeds) ? `<button onclick="cardAgent='';cardNbhd='';cardBeds='';currentPage=1;render();" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--card-bg);color:var(--muted);cursor:pointer;">Clear filters</button>` : ''}
+  </div>`;
 
   const locLeadCount = leads.filter(l => l.neighborhood).length;
   root.innerHTML = `
@@ -996,8 +1032,9 @@ function render() {
     <div class="cards-section">
       <div class="section-header">
         <span class="section-title">Lead Cards</span>
-        <span class="section-sub">${zillowLeads.length < leads.length ? `${zillowLeads.length} of ${leads.length} · listing inquiries only` : `${leads.length} total`} · page ${currentPage}</span>
+        <span class="section-sub">${filteredCards.length < zillowLeads.length ? `${filteredCards.length} of ${zillowLeads.length} filtered` : `${zillowLeads.length} total`} · page ${currentPage}</span>
       </div>
+      ${cardFiltersHtml}
       <div class="cards-list">${cardsHtml}</div>
       ${pageHtml}
     </div>
@@ -1009,6 +1046,7 @@ function render() {
 function setDate(val) {
   currentDate = val;
   currentPage = 1;
+  cardAgent = ''; cardNbhd = ''; cardBeds = '';
   document.querySelectorAll('#dateButtons button').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
   render();
@@ -1029,6 +1067,10 @@ function setView(val) {
   event.target.classList.add('active');
   render();
 }
+
+function setCardAgent(val) { cardAgent = val; currentPage = 1; render(); }
+function setCardNbhd(val) { cardNbhd = val; currentPage = 1; render(); }
+function setCardBeds(val) { cardBeds = val; currentPage = 1; render(); }
 
 function goPage(n) {
   currentPage = n;
