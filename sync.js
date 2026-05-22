@@ -4,7 +4,7 @@ const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
-const VERSION = '0.4.0';
+const VERSION = '0.5.0';
 const DATA_FILE = path.join(__dirname, 'public', 'data.json');
 
 // Boston metro ZIP → neighborhood (matches active-ads-combine)
