@@ -601,39 +601,57 @@ async function enrichNullAddressLeads(client, apiKey) {
 }
 
 async function enrichNullMoveInLeads(client, apiKey) {
+  // Also opportunistically fill address/neighborhood/beds for leads that have move_in but no address
   const { rows } = await client.query(`
-    SELECT fub_id FROM fub_leads
-    WHERE move_in IS NULL
+    SELECT fub_id, address FROM fub_leads
+    WHERE (move_in IS NULL OR address IS NULL)
       AND lead_date >= CURRENT_DATE - INTERVAL '14 days'
       AND (source IS NULL OR source NOT IN ('Website', 'Apartments.com'))
     ORDER BY lead_date DESC
   `);
 
-  if (!rows.length) { console.log('  No null-move_in leads to enrich'); return; }
-  console.log(`  Checking ${rows.length} lead(s) for move-in dates (last 14 days)...`);
+  if (!rows.length) { console.log('  No leads to enrich for move-in/address'); return; }
+  console.log(`  Checking ${rows.length} lead(s) for move-in + address data (last 14 days)...`);
 
-  let enriched = 0;
-  let errors = 0;
+  let enrichedMoveIn = 0;
+  let enrichedAddress = 0;
   for (let i = 0; i < rows.length; i++) {
-    const { fub_id } = rows[i];
-    const { moveIn } = await fetchPropertyData(apiKey, fub_id);
+    const { fub_id, address: existingAddress } = rows[i];
+    const { property: prop, moveIn } = await fetchPropertyData(apiKey, fub_id);
 
-    if (moveIn) {
+    const newAddress = prop ? (propertyToAddress(prop) || null) : null;
+    const hasNewMoveIn = moveIn;
+    const hasNewAddress = newAddress && !existingAddress;
+
+    if (hasNewMoveIn || hasNewAddress) {
+      const zip = prop?.code || extractZip(newAddress);
+      const neighborhood = getNeighborhood(zip);
+      const beds = prop?.bedrooms != null ? normalizeBeds(prop.bedrooms) : null;
+      const price = prop?.price ? parseInt(prop.price, 10) || null : null;
+      const zillow_url = (prop?.url && String(prop.url).includes('zillow')) ? prop.url : null;
       await client.query(`
-        UPDATE fub_leads SET move_in = $1
-        WHERE fub_id = $2 AND move_in IS NULL
-      `, [moveIn, fub_id]);
-      enriched++;
+        UPDATE fub_leads SET
+          move_in      = COALESCE($1, move_in),
+          address      = COALESCE($2, address),
+          zip          = COALESCE($3, zip),
+          neighborhood = COALESCE($4, neighborhood),
+          beds         = COALESCE($5, beds),
+          price        = COALESCE($6, price),
+          zillow_url   = COALESCE($8, zillow_url)
+        WHERE fub_id = $7
+      `, [moveIn, newAddress, zip, neighborhood, beds, price, fub_id, zillow_url]);
+      if (hasNewMoveIn) enrichedMoveIn++;
+      if (hasNewAddress) enrichedAddress++;
     }
 
     // Progress log every 100 leads
     if ((i + 1) % 100 === 0 || i === rows.length - 1) {
-      console.log(`  ${i + 1}/${rows.length} checked, ${enriched} enriched`);
+      console.log(`  ${i + 1}/${rows.length} checked, ${enrichedMoveIn} move-in, ${enrichedAddress} address`);
     }
 
     await new Promise(r => setTimeout(r, 1200));
   }
-  console.log(`  Enriched ${enriched}/${rows.length} lead(s) with move-in date`);
+  console.log(`  Enriched ${enrichedMoveIn} move-in + ${enrichedAddress} address out of ${rows.length} lead(s)`);
 }
 
 async function main() {
@@ -685,11 +703,13 @@ async function main() {
   }
 
   if (!process.env.BACKFILL_DAYS) {
-    console.log('\nEnriching null-address leads...');
+    // Cooldown after processLead burst before hitting FUB API again
+    console.log('\nEnriching null-address leads (30s cooldown)...');
+    await new Promise(r => setTimeout(r, 30000));
     await enrichNullAddressLeads(client, apiKey);
 
-    // Pause before move-in enrichment to avoid FUB rate limits after prior API calls
-    console.log('\nEnriching null-move_in leads (30s cooldown)...');
+    // Second enrichment pass: move-in + opportunistic address backfill
+    console.log('\nEnriching move-in + address gaps (30s cooldown)...');
     await new Promise(r => setTimeout(r, 30000));
     await enrichNullMoveInLeads(client, apiKey);
   }

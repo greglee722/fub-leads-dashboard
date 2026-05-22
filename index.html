@@ -825,7 +825,8 @@ function renderMoveInTable(leads) {
       </div>`;
     }).join('');
     unassignedHtml = `<div style="margin-top:16px;padding:16px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;">
-      <div style="font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:12px;">${unassigned.length} lead${unassigned.length !== 1 ? 's' : ''} with move-in but no neighborhood</div>
+      <div style="font-size:13px;font-weight:700;color:#7c3aed;margin-bottom:4px;">${unassigned.length} lead${unassigned.length !== 1 ? 's' : ''} with move-in but no property information</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.4;">No property data found in FUB — may be a manual import. Verify in FUB.</div>
       ${groups}
     </div>`;
   }
@@ -923,27 +924,24 @@ function renderNoAddressSection(leads, zillowLeads) {
   const noAddr = leads.filter(l => !l.address);
   if (!noAddr.length) return '';
 
-  // Detect likely manual entries: tight creation clusters or advanced stages
-  const manualStages = ['Questions Answered', 'Options Picked/Complete Showing', 'Non-workable', 'Closed', 'Rented'];
   const rows = noAddr.map(l => {
-    const isManual = manualStages.includes(l.stage);
-    const reason = isManual ? 'Likely manually entered — no listing event' : 'Profile-level inquiry — no listing clicked';
-    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;">
-      <span style="color:var(--text);">${l.lead_name || '—'}</span>
-      <span style="color:var(--muted);margin:0 12px;">${l.agent || '—'}</span>
-      <span style="color:var(--muted);margin:0 12px;">${fmtDate(l.date)}</span>
-      <span style="color:var(--muted);font-style:italic;flex:1;text-align:right;">${reason}</span>
+    const fubLink = l.fub_id ? `<a class="link-btn" href="https://app.followupboss.com/2/people/view/${l.fub_id}" target="_blank" style="font-size:11px;padding:3px 10px;">FUB →</a>` : '';
+    return `<div style="display:flex;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;gap:12px;">
+      <span style="color:var(--text);font-weight:600;flex:1;">${l.lead_name || '—'}</span>
+      <span style="color:var(--muted);min-width:120px;">${l.agent || '—'}</span>
+      <span style="color:var(--muted);min-width:90px;">${fmtDate(l.date)}</span>
+      ${fubLink}
     </div>`;
   }).join('');
 
   return `<details style="margin-top:16px;" id="noAddrDetails">
     <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);padding:8px 0;list-style:none;display:flex;align-items:center;gap:6px;">
       <span style="font-size:10px;">▶</span>
-      ${noAddr.length} lead${noAddr.length !== 1 ? 's' : ''} excluded from cards — no Zillow listing data
+      ${noAddr.length} lead${noAddr.length !== 1 ? 's' : ''} excluded — no property information found
     </summary>
     <div style="margin-top:8px;padding:12px 16px;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;font-size:12px;">
       <div style="color:var(--muted);margin-bottom:10px;line-height:1.5;">
-        These leads have no address or neighborhood data. Common causes: the renter contacted an agent directly through their Zillow profile (no listing clicked), or the lead was entered manually into FUB without a linked listing.
+        No property information found for these leads. This typically means the renter contacted an agent through their Zillow profile without clicking a specific listing, or the lead was manually imported into FUB. Verify in FUB to confirm.
       </div>
       ${rows}
     </div>
