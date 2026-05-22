@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-22T12:17:41.934Z",
+  "generated": "2026-05-22T14:53:13.063Z",
   "version": "0.4.0",
   "agents": [
     "Alejandro Cruz",
@@ -79,7 +79,7 @@
       "zillow_url": null,
       "lead_name": "Pierce Manchester",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Non-workable"
     },
     {
       "id": 5016,
@@ -199,7 +199,7 @@
       "zillow_url": null,
       "lead_name": "Dean DAddario",
       "source": "Zillow Rentals",
-      "stage": "Time Confirmed"
+      "stage": "Non-workable"
     },
     {
       "id": 5008,
@@ -244,7 +244,7 @@
       "zillow_url": null,
       "lead_name": "Lilly Ball",
       "source": "Zillow Rentals",
-      "stage": "Time Confirmed"
+      "stage": "Non-workable"
     },
     {
       "id": 5005,
@@ -484,7 +484,7 @@
       "zillow_url": null,
       "lead_name": "Nathalia Hermida",
       "source": "Zillow Rentals",
-      "stage": "Lead"
+      "stage": "Questions Answered"
     },
     {
       "id": 4989,
@@ -514,7 +514,7 @@
       "zillow_url": null,
       "lead_name": "Mari Quintero",
       "source": "Zillow Rentals",
-      "stage": "Time Confirmed"
+      "stage": "Non-workable"
     },
     {
       "id": 4987,
@@ -934,7 +934,7 @@
       "zillow_url": null,
       "lead_name": "Ruby Reimann",
       "source": "Zillow Rentals",
-      "stage": "Questions Answered"
+      "stage": "Non-workable"
     },
     {
       "id": 4424,
@@ -20274,255 +20274,51 @@
   ],
   "yglListings": [
     {
-      "id": "41055109",
-      "address": "1175 Boylston St. (Bsmt.)",
-      "unit": "50",
+      "id": "48166059",
+      "address": "91 Prince St.",
+      "unit": "4",
       "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
+      "zip": "02113",
+      "neighborhood": "North End",
       "beds": 2,
-      "price": 3650,
+      "price": 3695,
       "available_date": "09/01/2026",
       "fee": true
     },
     {
-      "id": "41053213",
-      "address": "1175 Boylston St.",
-      "unit": "12",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3095,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41053608",
-      "address": "1175 Boylston St.",
-      "unit": "3",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3125,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41057953",
-      "address": "1175 Boylston St.",
-      "unit": "46",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3095,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41092555",
-      "address": "1175 Boylston St.",
+      "id": "48166064",
+      "address": "91 Prince St.",
       "unit": "16",
       "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 3095,
+      "zip": "02113",
+      "neighborhood": "North End",
+      "beds": 2,
+      "price": 3795,
+      "available_date": "08/01/2026",
+      "fee": true
+    },
+    {
+      "id": "48166065",
+      "address": "91 Prince St.",
+      "unit": "18",
+      "city": "Boston",
+      "zip": "02113",
+      "neighborhood": "North End",
+      "beds": 2,
+      "price": 3795,
       "available_date": "09/01/2026",
       "fee": true
     },
     {
-      "id": "41048947",
-      "address": "1167 Boylston St.",
-      "unit": "11",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2425,
-      "available_date": "05/22/2026",
-      "fee": true
-    },
-    {
-      "id": "41053845",
-      "address": "1175 Boylston St.",
-      "unit": "9",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2465,
-      "available_date": "05/22/2026",
-      "fee": true
-    },
-    {
-      "id": "41056926",
-      "address": "1179 Boylston St.",
-      "unit": "17",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2325,
-      "available_date": "05/22/2026",
-      "fee": true
-    },
-    {
-      "id": "41060007",
+      "id": "79021946",
       "address": "1185 Boylston St.",
-      "unit": "22",
+      "unit": "34",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
       "beds": 0,
-      "price": 2225,
+      "price": 2365,
       "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41064352",
-      "address": "1191 Boylston St.",
-      "unit": "27",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2375,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41064431",
-      "address": "1191 Boylston St.",
-      "unit": "37",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2395,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41065695",
-      "address": "1191 Boylston St.",
-      "unit": "39",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2450,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41082206",
-      "address": "1179 Boylston St.",
-      "unit": "19",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2395,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41045787",
-      "address": "1163 Boylston St.",
-      "unit": "39",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2895,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41046182",
-      "address": "1163 Boylston St.",
-      "unit": "6",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2795,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41049895",
-      "address": "1167 Boylston St.",
-      "unit": "6",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2745,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41051001",
-      "address": "1171 Boylston St.",
-      "unit": "17",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2725,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41052739",
-      "address": "1171 Boylston St.",
-      "unit": "35",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2895,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41067275",
-      "address": "231 Park Dr.",
-      "unit": "26",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2795,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41069092",
-      "address": "231 Park Dr.",
-      "unit": "2",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2695,
-      "available_date": "09/01/2026",
-      "fee": true
-    },
-    {
-      "id": "41070435",
-      "address": "235 Park Dr.",
-      "unit": "12",
-      "city": "Boston",
-      "zip": "02215",
-      "neighborhood": "Fenway/Kenmore",
-      "beds": 1,
-      "price": 2750,
-      "available_date": "08/14/2026",
       "fee": true
     },
     {
@@ -20550,14 +20346,74 @@
       "fee": true
     },
     {
-      "id": "79021946",
-      "address": "1185 Boylston St.",
-      "unit": "34",
+      "id": "41070435",
+      "address": "235 Park Dr.",
+      "unit": "12",
       "city": "Boston",
       "zip": "02215",
       "neighborhood": "Fenway/Kenmore",
-      "beds": 0,
-      "price": 2365,
+      "beds": 1,
+      "price": 2750,
+      "available_date": "08/14/2026",
+      "fee": true
+    },
+    {
+      "id": "41069092",
+      "address": "231 Park Dr.",
+      "unit": "2",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2695,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41067275",
+      "address": "231 Park Dr.",
+      "unit": "26",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2795,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41052739",
+      "address": "1171 Boylston St.",
+      "unit": "35",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2895,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41051001",
+      "address": "1171 Boylston St.",
+      "unit": "17",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2725,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41049895",
+      "address": "1167 Boylston St.",
+      "unit": "6",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2745,
       "available_date": "09/01/2026",
       "fee": true
     },
@@ -20574,6 +20430,126 @@
       "fee": true
     },
     {
+      "id": "41046182",
+      "address": "1163 Boylston St.",
+      "unit": "6",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2795,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41045787",
+      "address": "1163 Boylston St.",
+      "unit": "39",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 2895,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41082206",
+      "address": "1179 Boylston St.",
+      "unit": "19",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2395,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41065695",
+      "address": "1191 Boylston St.",
+      "unit": "39",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2450,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41064431",
+      "address": "1191 Boylston St.",
+      "unit": "37",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2395,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41064352",
+      "address": "1191 Boylston St.",
+      "unit": "27",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2375,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41060007",
+      "address": "1185 Boylston St.",
+      "unit": "22",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2225,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41056926",
+      "address": "1179 Boylston St.",
+      "unit": "17",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2325,
+      "available_date": "05/22/2026",
+      "fee": true
+    },
+    {
+      "id": "41053845",
+      "address": "1175 Boylston St.",
+      "unit": "9",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2465,
+      "available_date": "05/22/2026",
+      "fee": true
+    },
+    {
+      "id": "41048947",
+      "address": "1167 Boylston St.",
+      "unit": "11",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 0,
+      "price": 2425,
+      "available_date": "05/22/2026",
+      "fee": true
+    },
+    {
       "id": "295416980",
       "address": "1167 Boylston St.",
       "unit": "25",
@@ -20582,6 +20558,66 @@
       "neighborhood": "Fenway/Kenmore",
       "beds": 1,
       "price": 2750,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41055109",
+      "address": "1175 Boylston St. (Bsmt.)",
+      "unit": "50",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 2,
+      "price": 3650,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41092555",
+      "address": "1175 Boylston St.",
+      "unit": "16",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 3095,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41057953",
+      "address": "1175 Boylston St.",
+      "unit": "46",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 3095,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41053608",
+      "address": "1175 Boylston St.",
+      "unit": "3",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 3125,
+      "available_date": "09/01/2026",
+      "fee": true
+    },
+    {
+      "id": "41053213",
+      "address": "1175 Boylston St.",
+      "unit": "12",
+      "city": "Boston",
+      "zip": "02215",
+      "neighborhood": "Fenway/Kenmore",
+      "beds": 1,
+      "price": 3095,
       "available_date": "09/01/2026",
       "fee": true
     }
