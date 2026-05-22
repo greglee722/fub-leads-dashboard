@@ -57,7 +57,7 @@
   .main { max-width: 1400px; margin: 0 auto; padding: 20px 28px; }
 
   /* Stats chips */
-  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
   .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); border-left: 3px solid var(--primary); transition: box-shadow var(--transition); }
   .stat-card:hover { box-shadow: var(--shadow-md); }
   .stat-card .label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px; }
@@ -507,6 +507,19 @@ function renderStats(leads) {
   const recPriceStr = topRec?.price ? ` · ${fmtPrice(topRec.price)}` : '';
   const recPriceSrc = topRec ? (topRec.price ? '<div style="font-size:10px;color:var(--muted);margin-top:2px;">Avg. Zillow listing price</div>' : '<div style="font-size:10px;color:var(--muted);margin-top:2px;">No price data available</div>') : '';
 
+  // Move-in month breakdown
+  const moveInMonths = {};
+  leads.forEach(l => {
+    if (!l.move_in) return;
+    const d = new Date(l.move_in + 'T12:00:00Z');
+    if (isNaN(d.getTime())) return;
+    const m = MONTH_NAMES[d.getUTCMonth()];
+    moveInMonths[m] = (moveInMonths[m] || 0) + 1;
+  });
+  const sortedMoveIn = Object.entries(moveInMonths).sort((a, b) => MONTH_NAMES.indexOf(a[0]) - MONTH_NAMES.indexOf(b[0]));
+  const topMoveIn = sortedMoveIn.length ? sortedMoveIn.reduce((a, b) => b[1] > a[1] ? b : a) : null;
+  const moveInSummary = sortedMoveIn.map(([m, c]) => `${m}: ${c}`).join(' · ');
+
   return `
     <div class="stats-row">
       <div class="stat-card">
@@ -524,6 +537,12 @@ function renderStats(leads) {
         <div class="value" style="font-size:16px;line-height:1.2;">${topRec ? bedsLabel(topRec.beds) + ' in ' + topRec.neighborhood : '—'}</div>
         <div class="sub">${topRec ? topRec.count + ' lead' + (topRec.count !== 1 ? 's' : '') + ' yesterday' + recPriceStr : 'no data'}</div>
         ${recPriceSrc}
+      </div>
+      <div class="stat-card" style="border-left-color:#7c3aed;">
+        <div class="label">Top Move-In</div>
+        <div class="value" style="font-size:22px;line-height:1.2;">${topMoveIn ? topMoveIn[0] : '—'}</div>
+        <div class="sub">${topMoveIn ? topMoveIn[1] + ' leads' : 'no move-in data'}</div>
+        ${sortedMoveIn.length ? `<div style="font-size:10px;color:var(--muted);margin-top:2px;">${moveInSummary}</div>` : ''}
       </div>
     </div>`;
 }
